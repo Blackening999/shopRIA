@@ -6,6 +6,7 @@ class Shop.Views.ItemsSearch extends Backbone.View
     'click #cancel'    : 'returnOnMain'
     'click .item_line' : 'selectItem'
     'click #addItem'   : 'addItem'
+    #'click #more'      : 'showMore' infinite scroll
   
   initialize: ->
     @collection.on('reset', @render, @)
@@ -45,12 +46,19 @@ class Shop.Views.ItemsSearch extends Backbone.View
       quantity: itm["quantity"]
       dimension: itm["dimension"]
       price_per_line: itm["price"] 
-    order_item = new Shop.Models.OrderItem(itmQ)
-    order_item.save()
-    @order_items_collection.add order_item, 
+    #order_item = new Shop.Models.OrderItem(itmQ)
+    #order_item.save()
+    @order_items_collection.create itmQ,#order_item
       wait: true
-      Backbone.history.navigate("/orders/#{@order_id}/edit", true)               
-          
+      #success: ->
+    Backbone.history.navigate("/orders/#{@order_id}/edit", true)
+    
+  showMore: -> #ifinite scroll
+    @$('#more').html('loading...').attr('disabled', 'disabled')
+    @collection.page++
+    #@collection.url = '/names/' + @collection.page
+                    
+
   returnOnMain: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'
       Backbone.history.navigate("/orders", true)

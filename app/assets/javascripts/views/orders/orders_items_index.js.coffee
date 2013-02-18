@@ -19,6 +19,6 @@ class Shop.Views.OrdersItemsIndex extends Backbone.View
 
   appendOrderItem: (order_item) =>
     #console.log order_item
-    if typeof(order_item.get('order_id'))=="undefined"      
-      view = new Shop.Views.OrderItemsItem(model: order_item)
-      @$('tbody').append(view.render().el)		
+    #if typeof(order_item.get('order_id'))=="undefined"      
+    view = new Shop.Views.OrderItemsItem(model: order_item)
+    @$('tbody').append(view.render().el)		

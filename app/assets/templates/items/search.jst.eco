@@ -27,6 +27,7 @@
 
     <section class="row-fluid">
       <button class="offset11 span1 btn btn-primary" id="addItem">Add</button>
+      <button class="offset11 span1 btn btn-primary" id="more">More</button>
     </section>
 
 	  <div class="panel">

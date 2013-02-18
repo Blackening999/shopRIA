@@ -47,13 +47,13 @@
   		<table id="orders" class="table table-condensed">
 		  <tbody>
 			<tr>
-				<th>Order Name</th>
-				<th>Total Price</th>
-				<th>Max Discount</th>
-				<th>Delivery Date</th>
-				<th>Status</th>
-				<th>Assignee</th>
-				<th>Role</th>
+				<th href="/orders?orderBy=order_number%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"          id="/orders?orderBy=order_number%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Order Name</th>
+				<th href="/orders?orderBy=total_price%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=total_price%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Total Price</th>
+				<th href="/orders?orderBy=max_discount%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=max_discount%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Max Discount</th>
+				<th href="/orders?orderBy=delivery_date%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=delivery_date%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Delivery Date</th>
+				<th href="/orders?orderBy=status%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=status%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Status</th>
+				<th href="/orders?orderBy=user_id%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=user_id%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Assignee</th>
+				<th href="/orders?orderBy=role%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=role%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Role</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>			

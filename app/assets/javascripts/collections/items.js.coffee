@@ -2,7 +2,7 @@ class Shop.Collections.Items extends Backbone.Collection
 
   model: Shop.Models.Item
   itemStore: {}
-  #itemQuery: {}
+  #page: 1 infinite scroll
   url: '/api/items'
 
   # initialize: (order_id) ->

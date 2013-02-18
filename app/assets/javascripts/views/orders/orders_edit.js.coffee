@@ -5,8 +5,9 @@ class Shop.Views.OrdersEdit extends Backbone.View
   template: JST['orders/show'] 
 
   events:
-    'click .backbone'  : 'addItemLink'
-    'click #cancel'    : 'returnOnMain' 
+    'click .backbone'     : 'navigateLink' 
+    'click #addItemLink'  : 'addItemLink'
+    'click #cancel'       : 'returnOnMain' 
 
   initialize: ->
     @model.on('change', @render, @) 
@@ -14,8 +15,13 @@ class Shop.Views.OrdersEdit extends Backbone.View
     @fillTable()
 
   render: ->    
-    $(@el).html(@template(order: @model))    
+    $(@el).html(@template(order: @model, pageInfo: @collection.pageInfo() ))    
     @
+
+  navigateLink: (event) ->
+    event.preventDefault()
+    Backbone.history.navigate(event.target.attributes["href"].value, true)     
+    false
 
   addItemLink: (event) ->
     #log.console event.target.attributes["href"].value
@@ -28,6 +34,5 @@ class Shop.Views.OrdersEdit extends Backbone.View
       Backbone.history.navigate("/orders", true)
     
   fillTable: ->  
-    @collection_of_orders_items = @model.order_items()
-    view = new Shop.Views.OrdersItemsIndex(collection: @collection_of_orders_items)    
-    $('#table_order_items').html(view.render().el)   
+    view = new Shop.Views.OrdersItemsIndex(collection: @model.order_items())    
+    $(@el).find('#table_order_items').html(view.render().el)   

@@ -3,8 +3,9 @@ class Shop.Views.OrdersIndex extends Backbone.View
   template: JST['orders/index']
 
   events:
-    'change #filter': 'fillFilterOptions'
+    'change #filter' : 'fillFilterOptions'
     'click .backbone': 'navigateLink' 
+    'click th'  : 'sortTable'
 
   initialize: ->
     @collection.on('reset', @render, @)
@@ -20,6 +21,18 @@ class Shop.Views.OrdersIndex extends Backbone.View
   navigateLink: (event) ->
     event.preventDefault()
     Backbone.history.navigate(event.target.attributes["href"].value, true)     
+    false
+
+  sortTable: (event) ->
+    event.preventDefault()
+    if @collection.pageInfo().orderBy.match /[a-zA-Z]+\s*desc/i
+      Backbone.history.navigate(event.target.attributes["href"].value, true) 
+      #@collection.fetch()
+      false
+    if @collection.pageInfo().orderBy.match /[a-zA-Z]+\s*asc/i
+      Backbone.history.navigate(event.target.attributes["id"].value, true)
+      #@collection.fetch()
+      false
     false
 
   appendOrder: (order) =>
