@@ -20,7 +20,7 @@ class Shop.Views.ItemsSearch extends Backbone.View
     @
   
   appendItem: (item) =>
-    view = new Shop.Views.ItemsItem(model: item, collection: @collection)
+    view = new Shop.Views.ItemsItem(model: item)
     @$('tbody').append(view.render().el)  
 
   selectItem: ->
