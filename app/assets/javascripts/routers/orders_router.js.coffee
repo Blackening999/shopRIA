@@ -13,12 +13,11 @@ class Shop.Routers.Orders extends Backbone.Router
     @collection = new Shop.Collections.Orders($('#container').data('order'))
     @collection.setPageInfo($('#container').data('pagination'))
     @collection.fetch()         
-    #@items = new Shop.Collections.Items()
-    #@items.fetch()
-
+    
   index: (params) ->
     params = _.strToParams(params)
-    @collection.setParams(params["orderBy"], params["page"], params["pp"]) if params["orderBy"]? && params["page"]? && params["pp"]?
+    if params?#["orderBy"]? && params["page"]? && params["pp"]? && params["filter_by"]? && params["filter_options"]? && params["search_orders"]? && params["request"]
+      @collection.setParams(params["orderBy"], params["page"], params["pp"], params["filter_by"], params["filter_options"], params["search_orders"], params["request"])
     view = new Shop.Views.OrdersIndex(collection: @collection)    
     $('#container').html(view.render().el)
 

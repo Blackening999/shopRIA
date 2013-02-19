@@ -3,15 +3,17 @@ class Shop.Views.OrdersIndex extends Backbone.View
   template: JST['orders/index']
 
   events:
-    'change #filter' : 'fillFilterOptions'
-    'click .backbone': 'navigateLink' 
-    'click th'  : 'sortTable'
+    'change #filter_by' : 'fillFilterOptions'
+    'click .backbone'   : 'navigateLink' 
+    'click th'          : 'sortTable'
+    'click #search'     : 'setFilter'
 
   initialize: ->
     @collection.on('reset', @render, @)
     @collection.on('add', @render, @)
     @collection.on('destroy', @render, @)
     @collection.on('change', @render, @)
+    #@trigger 'click #search'
 
   render: ->
     $(@el).html(@template(orders: @collection, pageInfo: @collection.pageInfo() ))
@@ -39,9 +41,18 @@ class Shop.Views.OrdersIndex extends Backbone.View
     view = new Shop.Views.OrdersOrder(model: order)
     @$('tbody').append(view.render().el)  
 
+  setFilter: (e) ->
+    e.preventDefault()
+    newFilter = $(@el).find('#filter_by :selected').val()
+    newFilterOpt = $(@el).find('#filter_options :selected').val()
+    newSearch = $(@el).find('#search_orders :selected').val()
+    newRequest = $(@el).find('#filterText').val()
+    @collection.filterTable(newFilter, newFilterOpt, newSearch, newRequest)
+    @render
+
   fillFilterOptions: ->
     $("#filter_options").children().remove()
-    cur_filter = (@$("#filter option:selected").val())    
+    cur_filter = (@$("#filter_by option:selected").val())    
     status = ["", "Ordered", "Pending", "Delivered"]
     role = ["", "Merchandiser", "Administrator", "Supervisor"]    
     if cur_filter is "Role"

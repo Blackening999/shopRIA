@@ -26,7 +26,6 @@ class Shop.Views.OrdersEdit extends Backbone.View
         _.each collection.models, (model) ->
           view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
           $('#items tbody').append view.render().el 
-    #@order_items = new Shop.Collections.OrderItems({order_id: @model.get('id')})
     @collection.fetch
       success: (collection) ->
         _.each collection.models, (model) ->

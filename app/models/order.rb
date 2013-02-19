@@ -28,5 +28,11 @@ class Order < ActiveRecord::Base
           
 
   default_scope -> { order("id asc") }
+
+  scope :filter_by, lambda { |field, query| where(
+        "#{field} LIKE '#{query}'"
+    )
+  }
+  
   paginates_per 5
 end

@@ -5,21 +5,20 @@
 
 <div class="panel">
         <h5>Search by</h5>
-
-        <form action="/" class="filters form-horizontal">
+<form action="/orders" class="filters form-horizontal" method="GET">
           <fieldset>
            <div class="control-group">
             <label for="filter" class="control-label">Filter orders by:</label>
             <div class="controls">
-              <select id="filter">
-            	<option value="Status">Status</option>
-            	<option value="Role">Role</option>                
+              <select id="filter_by" name="filter">
+              <option value="status">Status</option>
+              <option value="role">Role</option>                
               </select>            
             
-              <select id="filter_options">
-            	<option>Ordered</option>
-				<option>Pending</option>
-				<option>Delivered</option>               
+              <select id="filter_options" name="filter_options">
+              <option value="ordered">Ordered</option>
+              <option value="pending">Pending</option>
+              <option value="delivered">Delivered</option>               
               </select>
             </div>               
            </div>
@@ -30,13 +29,13 @@
             <label for="search_orders" class="control-label">Search for orders by:
             </label>
             <div class="controls">
-              <select id="search_orders">
-				<option>Order Name</option>
-				<option>Status</option>
-				<option>Assignee</option>
-			  </select>         
+              <select id="search_orders" name="search_orders">
+              <option value="order_number">Order Name</option>
+              <option value="status">Status</option>
+              <option value="assignee">Assignee</option>
+              </select>         
 
-			  <input type="text" id="filterText" name="request"> <input type="submit" id="search" class= "btn btn-primary"value="Apply">      
+        <input type="text" id="filterText" name="request"> <input type="submit" id="search" class= "btn btn-primary"value="Apply">      
             </div>   
            </div>
           </fieldset>  

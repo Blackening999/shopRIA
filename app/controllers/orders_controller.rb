@@ -2,18 +2,16 @@ class OrdersController < ApplicationController
   respond_to :html, :json
 
   def index
-  #  @orders = if params[:request]
-      #fields = if params[:fields] == "all_columns"
-      #  %w(login_name first_name last_name role)
-      #else
-      #  params[:fields] 
-     # end
-     # Order.send params[:scope].intern, fields, params[:request]
-  #  else
-   #   Order.scoped
-   # end
+    if params[:filter_by]
+      @orders = Order.filter_by(params[:filter_by], params[:filter_options])
+      if params[:request] != ""
+        @orders = @orders.filter_by(params[:filter_by], params[:request])
+      end
+    else  
+      @orders = Order.scoped
+    end
 
-    @orders = Order.reorder(params[:orderBy]).page(params[:page]).per(params[:pp])
+    @orders = @orders.reorder(params[:orderBy]).page(params[:page]).per(params[:pp])
 
     @pagination = {
       page:         @orders.current_page,
