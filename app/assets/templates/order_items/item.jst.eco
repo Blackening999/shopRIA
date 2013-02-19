@@ -5,5 +5,5 @@
 <td><%= @item.get('price') %></td> 
 <td><%= @item.get('quantity') %></td> 
 <td><%= @item.get('price_per_line') %></td> 
-<td><div id="edit" class= "btn"><i class="icon-edit"></i></div></td>
+<td><a href="#myModal" role="button" id="edit" class= "btn" data-toggle="modal"><i class="icon-edit"></i></a></td>
 <td><div id="destroy" class="btn"><i class="icon-trash"></i></div></td>

@@ -4,8 +4,7 @@ class Shop.Routers.Orders extends Backbone.Router
     "orders(/)"                           : "index"
     "orders/new(/)"                       : "newOrder"
     "orders/:id/edit(/)"                  : "edit"
-    "orders/:id/items(/)"                 : "addItem"
-    "orders/:id/order_items/:id/items(/)" : "editItem"
+    #"orders/:id/order_items/:id/items(/)" : "editItem"
                 
   initialize: ->
     @route /orders\/?\?(.*)/, "index", @index # orders?page=10&source=public
@@ -31,17 +30,6 @@ class Shop.Routers.Orders extends Backbone.Router
     view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items())
     view.order_id = id
     
-  addItem: (order_id) ->#old
-    @items = new Shop.Collections.Items()
-    @items.fetch()
-
-    window.order = @collection.get(order_id)
-    
-    view = new Shop.Views.ItemsSearch(collection: @items)
-    view.order_id = order_id
-    view.order_items_collection = window.order.order_items()
-    $('#container').html(view.render().el)
-  
   editItem: (order_id,order_item_id) ->
     @collection_of_items = new Shop.Collections.Items()
     @collection_of_items.fetch()    

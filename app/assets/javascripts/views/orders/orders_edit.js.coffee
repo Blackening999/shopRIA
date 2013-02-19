@@ -58,11 +58,14 @@ class Shop.Views.OrdersEdit extends Backbone.View
       quantity: itm["quantity"]
       dimension: itm["dimension"]
       price_per_line: itm["price"] 
-    @collection.create itmQ,
-      success: ->
-        wait: true
-        $(@el).find('#myModal').attr('data-dismiss', 'modal')
-        $(@el).find('#myModal').attr('aria-hidden', 'true')
+    order_item = new Shop.Models.OrderItem(itmQ)
+    view = new Shop.Views.OrderItemsItem(model: order_item)
+    @$('#items_table tbody').append(view.render().el)
+    #@collection.create itmQ,
+      #success: ->
+        #wait: true
+        #$(@el).find('#myModal').attr('data-dismiss', 'modal')
+        #$(@el).find('#myModal').attr('aria-hidden', 'true')
     
   navigateLink: (event) ->
     event.preventDefault()

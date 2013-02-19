@@ -42,7 +42,7 @@ $(function(){
 					</table>
 
 					<section class="row-fluid">
-						<button class="offset11 span1 btn btn-primary" id="addItem">
+						<button class="offset11 span1 btn btn-primary" id="addItem" data-dismiss="modal" aria-hidden="true">
 							Add
 						</button>						
 					</section>

@@ -5,14 +5,24 @@ class Shop.Views.OrdersNew extends Backbone.View
   template: JST['orders/new']
 
   events:
-    "submit #new_order": "createOrder"
-    'click #addItemLink': 'addItemLink'
-    'click #cancel'    : 'returnOnMain'
+    'submit #new_order'   : "createOrder"
+    'click #cancel'       : 'returnOnMain'
+    'click .item_line'    : 'selectItem'
+    'click #addItem'      : 'addItem' 
 
   
   initialize: ->
     @collection.on('add', @render, @)
+    @itemsLoad() 
     @render()
+
+  itemsLoad: ->
+    @items = new Shop.Collections.Items()
+    @items.fetch
+      success: (collection) ->
+        _.each collection.models, (model) ->
+          view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
+          $('#items tbody').append view.render().el
     
   render: ->
     @$el.html(@template())
@@ -27,6 +37,41 @@ class Shop.Views.OrdersNew extends Backbone.View
            required: "Order number cannot be blank!"
            maxlength: "Order number is too long"
     @
+
+  selectItem: ->
+    itm = @items.itemStore
+    console.log itm
+    itmName = itm["item_name"]
+    itmPrice = Number(itm["price"])
+    $(@el).find('#item_name').text(itmName)
+    $(@el).find('#price').text(itmPrice)
+    $(@el).find('#quantity').val(1)  
+
+
+  addItem: (e) ->
+    e.preventDefault()
+    itm = @items.itemStore
+    itm["quantity"] = Number($(@el).find('#quantity').val())
+    itm["dimension"] = $(@el).find('#dimension :selected').val()
+    switch itm["dimension"]
+      when "Item"    then itm["price_per_line"] = itm["price"]*itm["quantity"]
+      when "Box"     then itm["price_per_line"] = itm["price"]*itm["quantity"]*5
+      when "Package" then itm["price_per_line"] = itm["price"]*itm["quantity"]*10
+    itmQ =
+      order_id: Number(@order_id)
+      item_id: itm["id"] 
+      quantity: itm["quantity"]
+      dimension: itm["dimension"]
+      price_per_line: itm["price_per_line"] 
+      item_name: itm["item_name"]
+      item_description: itm["item_description"]
+      price: itm["price"]
+    order_item = new Shop.Models.OrderItem(itmQ)
+    view = new Shop.Views.OrderItemsItem(model: order_item)
+    @$('#items_table tbody').append(view.render().el)    
+    #order_item.save()
+    #@order_items_collection.create itmQ,#order_item
+    #  wait: true        
 
   createOrder: (event) ->    
     event.preventDefault()    
@@ -48,10 +93,6 @@ class Shop.Views.OrdersNew extends Backbone.View
       errors = $.parseJSON(response.responseText).errors
       for attribute, messages of errors
         alert "#{attribute} #{message}" for message in messages
-
-  #addItemLink: (e) ->
-    #Backbone.history.navigate("orders/#{@model.get('id')}/items", true)
-    #false  
 
   returnOnMain: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'
