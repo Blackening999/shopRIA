@@ -16,6 +16,7 @@ class Shop.Views.OrderItemsItem extends Backbone.View
     Backbone.history.navigate("orders/" + order_id + "/order_items/" + @model.get("id") + "/items", true)
 
   destroy: ->
-    order_id = @model.collection.order_id.order_id
-    @model['url'] =  "/api/orders/" + order_id + "/order_items/" + @model.get("id")
-    @model.destroy() if confirm 'Are you sure you want to delete this item?'
+    #order_id = @model.collection.order_id.order_id
+    $(@el).remove()
+    #@model['url'] =  "/api/orders/" + order_id + "/order_items/" + @model.get("id")
+    #@model.destroy() if confirm 'Are you sure you want to delete this item?'

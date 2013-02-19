@@ -9,16 +9,3 @@
   <th>Edit</th>
   <th>Delete</th>
 </tr>     
-<% for item in @order_items.models: %>
-<tr>
-<td><%= item.get('item_id')%></td> 
-<td><%= item.get('item_name')%></td> 
-<td><%= item.get('item_description') %></td> 
-<td><%= item.get('dimension') %></td> 
-<td><%= item.get('price') %></td> 
-<td><%= item.get('quantity') %></td> 
-<td><%= item.get('price_per_line') %></td> 
-<td><div id="edit" class= "btn"><i class="icon-edit"></i></div></td>
-<td><div id="destroy" class="btn"><i class="icon-trash"></i></div></td>
-</tr>
-<% end %>

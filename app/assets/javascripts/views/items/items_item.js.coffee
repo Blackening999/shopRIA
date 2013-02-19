@@ -12,4 +12,6 @@ class Shop.Views.ItemsItem extends Backbone.View
     @
    
   selectItem: ->
-    @collection.itemStore = @model.attributes   
+    @collection.itemStore = @model.attributes 
+    console.log @collection.itemStore
+

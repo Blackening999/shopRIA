@@ -51,7 +51,8 @@ class Shop.Views.ItemsSearch extends Backbone.View
     @order_items_collection.create itmQ,#order_item
       wait: true
       #success: ->
-    Backbone.history.navigate("/orders/#{@order_id}/edit", true)
+    #Backbone.history.navigate("/orders/#{@order_id}/edit", true)
+    window.history.back()
     
   showMore: -> #ifinite scroll
     @$('#more').html('loading...').attr('disabled', 'disabled')

@@ -14,13 +14,14 @@ $(function(){
     <section class="row-fluid">
        <h4>
 		This page is appointed for selecting and buying products
-	   </h4>
+	   </h4>	   
     </section>
 <form id="new_order">		
 	<div class="items_panel">
         <h5>Items Selection</h5>
 		<div class="row-fluid">
-			<button class="btn btn-primary">Add Item</button>
+			<button class="btn btn-primary">Add MYItem</button>
+			<a type="button" class="btn" href="#test_modal" data-toggle="modal">Add Image</a>
 			<select class="limit pull-right">
 				<option>
 					show 10 lines
