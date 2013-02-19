@@ -13,6 +13,8 @@ class Shop.Routers.Orders extends Backbone.Router
     @collection = new Shop.Collections.Orders($('#container').data('order'))
     @collection.setPageInfo($('#container').data('pagination'))
     @collection.fetch()         
+    #@items = new Shop.Collections.Items()
+    #@items.fetch()
 
   index: (params) ->
     params = _.strToParams(params)
@@ -27,9 +29,10 @@ class Shop.Routers.Orders extends Backbone.Router
     params = _.strToParams(params)
     order = @collection.get(id)  
     order.order_items().setParams(params["orderBy"], params["page"], params["pp"]) if params["orderBy"]? && params["page"]? && params["pp"]?
-    view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items() )
-
-  addItem: (order_id) ->
+    view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items())
+    view.order_id = id
+    
+  addItem: (order_id) ->#old
     @items = new Shop.Collections.Items()
     @items.fetch()
 

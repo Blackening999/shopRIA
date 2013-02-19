@@ -6,35 +6,34 @@ class Shop.Views.OrdersEdit extends Backbone.View
 
   events:
     'click .backbone'     : 'navigateLink' 
-    'click #addItemLink'  : 'addItemLink'
     'click #cancel'       : 'returnOnMain'
     'click .item_line'    : 'selectItem'
     'click #addItem'      : 'addItem' 
-
-  initialize: ->
-    @model.on('change', @render, @)     
    
-    @items = new Shop.Collections.Items({order_id: @model.get('id')})
-    @items.fetch
-      success: (collection) ->
-        console.log "There are now #{collection.length} suggestions in our collection."        
-        i = 0
-        while i < collection.length
-          item = collection.at(i)          
-          view = new Shop.Views.ItemsItem (model: item, collection: @items)                 
-          $('#items tbody').append view.render().el 
-          i++        
-      error: (collection, response) ->
-        console.log "Sad face! Server says #{response.status}."
-    
+  initialize: ->
+    @model.on('change', @render, @)  
+    @itemsLoad()   
     @render()
-    @fillTable()
-    #@fillItems() 
-
+      
   render: ->    
     $(@el).html(@template(order: @model, pageInfo: @collection.pageInfo()))    
     @
 
+  itemsLoad: ->
+    @items = new Shop.Collections.Items()
+    @items.fetch
+      success: (collection) ->
+        _.each collection.models, (model) ->
+          view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
+          $('#items tbody').append view.render().el 
+    #@order_items = new Shop.Collections.OrderItems({order_id: @model.get('id')})
+    @collection.fetch
+      success: (collection) ->
+        _.each collection.models, (model) ->
+          orderView = new Shop.Views.OrderItemsItem(model: model)
+          @$('#items_table tbody').append(orderView.render().el)
+    @render()
+   
   selectItem: ->
     itm = @items.itemStore
     console.log itm
@@ -45,7 +44,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
     $(@el).find('#quantity').val(1)  
 
 
-  addItem: (e) ->
+  addItem: (e) =>
     e.preventDefault()
     itm = @items.itemStore
     itm["quantity"] = Number($(@el).find('#quantity').val())
@@ -60,35 +59,17 @@ class Shop.Views.OrdersEdit extends Backbone.View
       quantity: itm["quantity"]
       dimension: itm["dimension"]
       price_per_line: itm["price"] 
-    #order_item = new Shop.Models.OrderItem(itmQ)
-    #order_item.save()
-    @order_items_collection.create itmQ,#order_item
-      wait: true
-      #success: ->
-    #Backbone.history.navigate("/orders/#{@order_id}/edit", true)
-    window.history.back() 
-
+    @collection.create itmQ,
+      success: ->
+        wait: true
+        $(@el).find('#myModal').attr('data-dismiss', 'modal')
+        $(@el).find('#myModal').attr('aria-hidden', 'true')
+    
   navigateLink: (event) ->
     event.preventDefault()
     Backbone.history.navigate(event.target.attributes["href"].value, true)     
     false
-
-  addItemLink: (event) ->
-    #log.console event.target.attributes["href"].value
-    Backbone.history.navigate("orders/#{@model.get('id')}/items", true)
-    #Backbone.history.navigate(event.target.attributes["href"].value, true) 
-    false  
-
+  
   returnOnMain: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'
-      Backbone.history.navigate("/orders", true)
-    
-  fillTable: ->  
-    view = new Shop.Views.OrdersItemsIndex(collection: @model.order_items())    
-    $(@el).find('#table_order_items').html(view.render().el)   
-
-  fillItems: ->
-    @items = @model.items()
-    console.log @items
-        
-     
+      Backbone.history.navigate("/orders", true) 
