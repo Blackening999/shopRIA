@@ -3,7 +3,7 @@
 <td><%= @item.get('item_description') %></td> 
 <td><%= @item.get('dimension') %></td> 
 <td><%= @item.get('price') %></td> 
-<td><%= @item.get('quantity') %></td> 
-<td><%= @item.get('price_per_line') %></td> 
-<td><a href="#myModal" role="button" id="edit" class= "btn" data-toggle="modal"><i class="icon-edit"></i></a></td>
-<td><div id="destroy" class="btn"><i class="icon-trash"></i></div></td>
+<td class="quantity"><%= @item.get('quantity') %></td> 
+<td class="price"><%= @item.get('price_per_line') %></td> 
+<td><a href="#myModal" role="button" class= "edit btn" data-toggle="modal"><i class="icon-edit"></i></a></td>
+<td><div class="destroy btn" id="destroy"><i class="icon-trash"></i></div></td>

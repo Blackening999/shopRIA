@@ -35,7 +35,6 @@ class Shop.Views.OrdersEdit extends Backbone.View
    
   selectItem: ->
     itm = @items.itemStore
-    console.log itm
     itmName = itm["item_name"]
     itmPrice = Number(itm["price"])
     $(@el).find('#item_name').text(itmName)

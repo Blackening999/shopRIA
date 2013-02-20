@@ -40,7 +40,6 @@ class Shop.Views.OrdersNew extends Backbone.View
 
   selectItem: ->
     itm = @items.itemStore
-    console.log itm
     itmName = itm["item_name"]
     itmPrice = Number(itm["price"])
     $(@el).find('#item_name').text(itmName)
@@ -67,18 +66,19 @@ class Shop.Views.OrdersNew extends Backbone.View
       item_description: itm["item_description"]
       price: itm["price"]
     order_item = new Shop.Models.OrderItem(itmQ)
-    view = new Shop.Views.OrderItemsItem(model: order_item)
+    tmpItms = @items.tempAdd(order_item)#temporary adding model
+    $(@el).find('#total_price').text(tmpItms.price)
+    $(@el).find('#total_num_of_items').text(tmpItms.totalNum)
+    view = new Shop.Views.OrderItemsItem(model: order_item, collection: @items)
     @$('#items_table tbody').append(view.render().el)    
-    #order_item.save()
-    #@order_items_collection.create itmQ,#order_item
-    #  wait: true        
+    
 
   createOrder: (event) ->    
     event.preventDefault()    
     attributes = 
       order_number:       $(@el).find('#order_number').val()
       status:             $(@el).find('#status').text()      
-      total_price:        $(@el).find('#total_price').text()      
+      totalPrice:        $(@el).find('#totalPrice').text()      
       total_num_of_items: $(@el).find('#total_num_of_items').text()
       date_of_ordering:   $(@el).find('#date_of_ordering').text()
     @collection.create attributes,

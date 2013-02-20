@@ -5,7 +5,7 @@ class Shop.Views.OrderItemsItem extends Backbone.View
 
   events:
     'click #edit'   : 'goToEdit'
-    'click #destroy': 'destroy' 
+    'click #destroy' : 'destroy' 
    
   render: ->
     $(@el).html(@template(item: @model))
@@ -16,7 +16,14 @@ class Shop.Views.OrderItemsItem extends Backbone.View
     Backbone.history.navigate("orders/" + order_id + "/order_items/" + @model.get("id") + "/items", true)
 
   destroy: ->
-    #order_id = @model.collection.order_id.order_id
+    _.each @collection.itemsStore, (tempModel, index) =>
+      if @model.cid == tempModel.cid
+        @collection.totalPrice -= Number(tempModel.attributes.price_per_line)
+        @collection.itemsStore.splice(index, 1)
+    console.log @collection
+    $('#total_price').text(@collection.totalPrice)
+    $('#total_num_of_items').text(@collection.itemsStore.length)
     $(@el).remove()
-    #@model['url'] =  "/api/orders/" + order_id + "/order_items/" + @model.get("id")
     @model.destroy() #if confirm 'Are you sure you want to delete this item?'
+    
+    
