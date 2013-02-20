@@ -5,16 +5,63 @@ class Shop.Views.OrdersNew extends Backbone.View
   template: JST['orders/new']
 
   events:
-    'submit #new_order'   : "createOrder"
+    'submit #new_order'   : 'createOrder'
     'click #cancel'       : 'returnOnMain'
     'click .item_line'    : 'selectItem'
     'click #addItem'      : 'addItem' 
-
-  
+      
   initialize: ->
     @collection.on('add', @render, @)
     @itemsLoad() 
     @render()
+    @setDates()    
+
+  setDates: ->  
+    d = new Date()
+    d = d.getUTCMonth()+1 + "/" + d.getUTCDate() + "/" + d.getFullYear()
+    $(@el).find("#date_of_ordering").text(d)
+    $(@el).find("#expiry_date").val(d)
+
+  validateForm: ->    
+    @checkDates()     
+    
+    @$('form#new_order').validate
+      rules:
+        order_number: 
+          required: true           
+        credit_card_number:
+          required: true
+          digits: true
+          maxlength: 16     
+          minlength: 16
+        cvv2:
+          required: true
+          digits: true
+          maxlength: 3     
+          minlength: 3
+        issue_number:
+          digits: true
+          maxlength: 1     
+          minlength: 1            
+          
+      messages:
+        order_number: 
+          required: "Order number cannot be blank!"
+        credit_card_number: 
+          required: "Credit card number cannot be blank!"
+          digits: "Credit card number should contain digits only!"
+          maxlength: "Credit card number should contain 16 digits!"     
+          minlength: "Credit card number should contain 16 digits!"
+        cvv2: 
+          required: "cvv2 cannot be blank!"
+          digits: "cvv2 should contain digits only!"
+          maxlength: "cvv2 should contain 3 digits!"     
+          minlength: "cvv2 should contain 3 digits!"
+        issue_number:
+          digits: "Issue number should contain digits only!"
+          maxlength: "Issue number should contain 1 digit"     
+          minlength: "Issue number should contain 1 digit"                            
+
 
   itemsLoad: ->
     @items = new Shop.Collections.Items()
@@ -25,17 +72,7 @@ class Shop.Views.OrdersNew extends Backbone.View
           $('#items tbody').append view.render().el
     
   render: ->
-    @$el.html(@template())
-    @$('form#new_order').validate
-       rules:
-         order_number: 
-           required: true
-           maxlength: 5
-
-       messages:
-         order_number: 
-           required: "Order number cannot be blank!"
-           maxlength: "Order number is too long"
+    @$el.html(@template())    
     @
 
   selectItem: ->
@@ -46,6 +83,17 @@ class Shop.Views.OrdersNew extends Backbone.View
     $(@el).find('#price').text(itmPrice)
     $(@el).find('#quantity').val(1)  
 
+  checkDates: -> 
+    pref_delivery_date = $(@el).find("#pref_delivery_date").val()
+    date_of_ordering = $(@el).find("#date_of_ordering").text()
+    dateIsInvalid = (new Date(pref_delivery_date).getTime() < new Date(date_of_ordering).getTime())    
+    $('#pref_delivery_date').after('<label for="pref_delivery_date" generated="true" class="error">Preferable Delivery Date goes before the Date of Ordering!</label>')  if dateIsInvalid
+
+    expiry_date = $(@el).find("#expiry_date").val()
+    start_date = $(@el).find("#start_date").val()
+    startDateIsInvalid = (new Date(start_date).getTime() > new Date(expiry_date).getTime())    
+    $('#start_date').after('<label for="start_date" generated="true" class="error">Expiry Date goes before the Start Date!</label>')  if startDateIsInvalid
+   
 
   addItem: (e) ->
     e.preventDefault()
@@ -74,19 +122,20 @@ class Shop.Views.OrdersNew extends Backbone.View
     
 
   createOrder: (event) ->    
-    event.preventDefault()    
-    attributes = 
-      order_number:       $(@el).find('#order_number').val()
-      status:             $(@el).find('#status').text()      
-      totalPrice:        $(@el).find('#totalPrice').text()      
-      total_num_of_items: $(@el).find('#total_num_of_items').text()
-      date_of_ordering:   $(@el).find('#date_of_ordering').text()
-    @collection.create attributes,
-      wait: true
-      success: -> 
-        $('#new_order')[0].reset()
-        Backbone.history.navigate("/orders", true)            
-      error: @handleError
+    @validateForm()
+    event.preventDefault()        
+    # attributes = 
+    #   order_number:       $(@el).find('#order_number').val()
+    #   status:             $(@el).find('#status').text()      
+    #   totalPrice:        $(@el).find('#totalPrice').text()      
+    #   total_num_of_items: $(@el).find('#total_num_of_items').text()
+    #   date_of_ordering:   $(@el).find('#date_of_ordering').text()
+    # @collection.create attributes,
+    #   wait: true
+    #   success: -> 
+    #     $('#new_order')[0].reset()
+    #     Backbone.history.navigate("/orders", true)            
+    #   error: @handleError
 
   handleError: (order, response) ->
     if response.status == 422
