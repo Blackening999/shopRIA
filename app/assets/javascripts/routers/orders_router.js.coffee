@@ -21,7 +21,7 @@ class Shop.Routers.Orders extends Backbone.Router
     $('#container').html(view.render().el)
 
   newOrder: ->
-    view = new Shop.Views.OrdersNew({collection: @collection})    
+    view = new Shop.Views.OrdersNew(collection: @collection)    
 
   edit: (id, params) -> 
     params = _.strToParams(params)

@@ -14,6 +14,7 @@ class Shop.Views.OrdersIndex extends Backbone.View
     @collection.on('destroy', @render, @)
     @collection.on('change', @render, @)
     #@trigger 'click #search'
+    console.log @collection
 
   render: ->
     $(@el).html(@template(orders: @collection, pageInfo: @collection.pageInfo() ))

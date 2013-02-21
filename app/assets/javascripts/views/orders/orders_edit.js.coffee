@@ -14,6 +14,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
     @model.on('change', @render, @)  
     @itemsLoad()   
     @render()
+    console.log @collection
       
   render: ->    
     $(@el).html(@template(order: @model, pageInfo: @collection.pageInfo()))    
