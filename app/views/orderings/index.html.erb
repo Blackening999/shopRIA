@@ -1,0 +1,21 @@
+<h1>Listing orderings</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @orderings.each do |ordering| %>
+  <tr>
+    <td><%= link_to 'Show', ordering %></td>
+    <td><%= link_to 'Edit', edit_ordering_path(ordering) %></td>
+    <td><%= link_to 'Destroy', ordering, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Ordering', new_ordering_path %>

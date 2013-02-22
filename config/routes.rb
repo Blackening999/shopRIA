@@ -1,5 +1,8 @@
 Shop::Application.routes.draw do
   
+  resources :orderings
+
+
   devise_for  :users,
               :skip => [:registrations, :confirmations]
   
