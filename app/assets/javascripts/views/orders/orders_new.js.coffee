@@ -7,28 +7,26 @@ class Shop.Views.OrdersNew extends Backbone.View
   events:
     'click #save'                    : 'saveOrder'
     'submit #new_order'              : 'createNewOrder'
-    'click #cancel'                  : 'returnOnMain'
+    'click #cancel'                  : 'cancelChanges'
     'click .item_line'               : 'selectItem'
     'click #editModal .item_line'    : 'selectEditItem'
     'click #addItem'                 : 'addItem' 
     'click #editItem'                : 'editItem'
 
-  
   initialize: ->
     @collection.on('add', @render, @)
     @itemsLoad() 
-    @order_items_collection = new Shop.Collections.OrderItems()
-    @setDates() 
-    @render()
-        
+    @render()    
+           
   itemsLoad: ->
     @items = new Shop.Collections.Items()
     @items.fetch
-      success: (collection) ->
-        _.each collection.models, (model) ->
+      success: (collection) =>
+        _.each collection.models, (model) =>
           view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
           $('#items tbody').append view.render().el
-   
+    @order_items = @model.order_items()
+          
   setDates: ->  
     d = new Date()
     d = d.getUTCMonth()+1 + "/" + d.getUTCDate() + "/" + d.getFullYear()
@@ -107,7 +105,7 @@ class Shop.Views.OrdersNew extends Backbone.View
     $('#editModal #price').text(itmPrice)
     $('#editModal #quantity').val(1)
 
-  addItem: (e) ->
+  addItem: (e) =>
     e.preventDefault()
     itm = @items.itemStore
     itm["quantity"] = Number($(@el).find('#quantity').val())
@@ -117,7 +115,7 @@ class Shop.Views.OrdersNew extends Backbone.View
       when "Box"     then itm["price_per_line"] = itm["price"]*itm["quantity"]*5
       when "Package" then itm["price_per_line"] = itm["price"]*itm["quantity"]*10
     itmQ =
-      order_id: Number(@order_id)
+      order_id: Number(@model.id)
       item_id: itm["id"] 
       quantity: itm["quantity"]
       dimension: itm["dimension"]
@@ -125,26 +123,29 @@ class Shop.Views.OrdersNew extends Backbone.View
       item_name: itm["item_name"]
       item_description: itm["item_description"]
       price: itm["price"]
-    order_item = new Shop.Models.OrderItem(itmQ)
-    @order_items_collection.add order_item
-    tmpItms = @items.tempAdd(order_item)#temporary adding model
-    $(@el).find('#total_price').text(tmpItms.price)
-    $(@el).find('#total_num_of_items').text(tmpItms.totalNum)
-    view = new Shop.Views.OrderItemsItem(model: order_item, collection: @items)
-    @$('#items_table tbody').append(view.render().el)
-          
+    @order_items.create itmQ,
+      wait: true
+      success: =>
+        @items.countPrice(itmQ) 
+        orderItem = @order_items.at(@order_items.length-1)   
+        #console.log orderItem      
+        $(@el).find('#total_price').text(@items.totalPrice)
+        $(@el).find('#total_num_of_items').text(@order_items.length)
+        view = new Shop.Views.OrderItemsItem(model: orderItem, collection: @items)
+        @$('#items_table tbody').append(view.render().el)
+        console.log orderItem             
         
   editItem: (e) ->
     e.preventDefault()
     itm = @items.itemStore
-    itm["quantity"] = Number($(@el).find('#quantity').val())
-    itm["dimension"] = $(@el).find('#dimension :selected').val()
+    itm["quantity"] = Number($(@el).find('#editModal #quantity').val())
+    itm["dimension"] = $(@el).find('#editModal #dimension :selected').val()
     switch itm["dimension"]
       when "Item"    then itm["price_per_line"] = itm["price"]*itm["quantity"]
       when "Box"     then itm["price_per_line"] = itm["price"]*itm["quantity"]*5
       when "Package" then itm["price_per_line"] = itm["price"]*itm["quantity"]*10
     itmQ =
-      order_id: Number(@order_id)
+      order_id: Number(@model.id)
       item_id: itm["id"] 
       quantity: itm["quantity"]
       dimension: itm["dimension"]
@@ -152,54 +153,38 @@ class Shop.Views.OrdersNew extends Backbone.View
       item_name: itm["item_name"]
       item_description: itm["item_description"]
       price: itm["price"]
-    _.each @order_items_collection.models, (model) =>
-      if @items.cid == model.cid
+    _.each @model.order_items().models, (model) =>
+      if @items.id == model.id
         @items.totalPrice -= Number(model.attributes.price_per_line)
         model.set(itmQ)
         @items.totalPrice += Number(model.attributes.price_per_line)
     $(@el).find('#total_price').text(@items.totalPrice)
-    $(@el).find('#total_num_of_items').text(@order_items_collection.models.length) 
+    $(@el).find('#total_num_of_items').text(@model.order_items().models.length) 
 
 
   saveOrder: (e) ->    
-    e.preventDefault()  
-    @validateForm()  
-    if @items.itemsStore.length > 0                 #here need your validation like this
+    e.preventDefault() 
+    if @model.order_items().length > 0  
+      #@validateForm()               #here need your validation like this
       $('#new_order')[0].reset()                    #and if it's allright 
       $(@el).find('#newOrder').removeAttr("disabled")
       $(@el).find('#save').attr("disabled", true)
-      attributes = 
-      order_number:       $(@el).find('#order_number').val()
-      status:             $(@el).find('#status').text()      
-      totalPrice:        $(@el).find('#totalPrice').text()      
-      total_num_of_items: $(@el).find('#total_num_of_items').text()
-      date_of_ordering:   $(@el).find('#date_of_ordering').text()
-    @collection.create attributes
-
-
-  createNewOrder: (e) ->   
-    e.preventDefault()
+            
+  createNewOrder: (event) ->   
+    event.preventDefault()
     attributes = 
-      order_number:       $(@el).find('#order_number').val()
-      status:             $(@el).find('#status').text()      
-      totalPrice:        $(@el).find('#totalPrice').text()      
-      total_num_of_items: $(@el).find('#total_num_of_items').text()
-      date_of_ordering:   $(@el).find('#date_of_ordering').text()
-    @collection.create attributes
-    lenAt = @collection.length-1
-    order = @collection.get(@collection.models[lenAt])
-    order.save()
-    console.log @collection                       #strange canot find id but it exists
-    console.log order
-    console.log order.cid
-    @order_items_collection.order_id = {order_id: order.id} #set order_items id
-    console.log @order_items_collection.order_id
-    _.each @order_items_collection.models, (model) -> 
-      model.save() if model.isNew()             #and save model in order_items
+        order_number:       $(@el).find('#order_number').val()
+        status:             $(@el).find('#status').text('pending')      
+        totalPrice:        $(@el).find('#totalPrice').val()      
+        total_num_of_items: $(@el).find('#total_num_of_items').val()
+        date_of_ordering:   $(@el).find('#date_of_ordering').val()
+    @model.set attributes
     $(@el).find('#newOrder').attr("disabled", true)
     $(@el).find('#save').removeAttr("disabled")
     Backbone.history.navigate("/orders", true)
       
-  returnOnMain: ->
+  cancelChanges: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'
+      @model.destroy()
+      $(@el).remove()
       Backbone.history.navigate("/orders", true)

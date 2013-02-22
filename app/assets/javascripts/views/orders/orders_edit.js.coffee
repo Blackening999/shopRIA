@@ -14,7 +14,6 @@ class Shop.Views.OrdersEdit extends Backbone.View
     @model.on('change', @render, @)  
     @itemsLoad()   
     @render()
-    console.log @collection
       
   render: ->    
     $(@el).html(@template(order: @model, pageInfo: @collection.pageInfo()))    
@@ -61,12 +60,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
     order_item = new Shop.Models.OrderItem(itmQ)
     view = new Shop.Views.OrderItemsItem(model: order_item)
     @$('#items_table tbody').append(view.render().el)
-    #@collection.create itmQ,
-      #success: ->
-        #wait: true
-        #$(@el).find('#myModal').attr('data-dismiss', 'modal')
-        #$(@el).find('#myModal').attr('aria-hidden', 'true')
-    
+        
   navigateLink: (event) ->
     event.preventDefault()
     Backbone.history.navigate(event.target.attributes["href"].value, true)     

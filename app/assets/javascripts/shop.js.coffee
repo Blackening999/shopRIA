@@ -5,7 +5,7 @@ window.Shop =
   Routers: {}
   initOrders: -> 
     new Shop.Routers.Orders()
-    Backbone.history.start(pushState: true)
+    Backbone.history.start(pushState: true) #set -> root: "/orders" cause history must start from it
 
   initUsers: -> 
     new Shop.Routers.Users()

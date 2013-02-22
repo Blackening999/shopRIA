@@ -21,7 +21,7 @@ class OrderItemsController < ApplicationController
      # per_page:     @order_items.limit_value,
      # total_count:  order_item.count,
    # }
-    @order = Order.find params[:order_id]
+    @order = Order.find params[:order_id] #Question 3
 
     @all_items = @order.items.select("order_items.id,item_id,item_name,item_description,dimension,price,quantity,price_per_line")    
     

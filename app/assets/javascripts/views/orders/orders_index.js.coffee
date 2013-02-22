@@ -13,9 +13,7 @@ class Shop.Views.OrdersIndex extends Backbone.View
     @collection.on('add', @render, @)
     @collection.on('destroy', @render, @)
     @collection.on('change', @render, @)
-    #@trigger 'click #search'
-    console.log @collection
-
+    
   render: ->
     $(@el).html(@template(orders: @collection, pageInfo: @collection.pageInfo() ))
     @collection.each(@appendOrder)
@@ -26,7 +24,7 @@ class Shop.Views.OrdersIndex extends Backbone.View
     Backbone.history.navigate(event.target.attributes["href"].value, true)     
     false
 
-  sortTable: (event) ->
+  sortTable: (event) ->   #Question 2
     event.preventDefault()
     if @collection.pageInfo().orderBy.match /[a-zA-Z]+\s*desc/i
       Backbone.history.navigate(event.target.attributes["href"].value, true) 

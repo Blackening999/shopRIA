@@ -12,7 +12,7 @@ class Shop.Routers.Orders extends Backbone.Router
     @collection = new Shop.Collections.Orders($('#container').data('order'))
     @collection.setPageInfo($('#container').data('pagination'))
     @collection.fetch()         
-    
+        
   index: (params) ->
     params = _.strToParams(params)
     if params?#["orderBy"]? && params["page"]? && params["pp"]? && params["filter_by"]? && params["filter_options"]? && params["search_orders"]? && params["request"]
@@ -21,7 +21,19 @@ class Shop.Routers.Orders extends Backbone.Router
     $('#container').html(view.render().el)
 
   newOrder: ->
-    view = new Shop.Views.OrdersNew(collection: @collection)    
+    startAttr = 
+      order_number:       Math.floor(Math.random()*(99999-10000+1))+10000
+      status:             ""                  
+      totalPrice:         ""      
+      total_num_of_items: ""
+      date_of_ordering:   ""
+    #order = new Shop.Models.Order(startAttr)
+    @collection.create startAttr,
+      wait: true
+      success: =>
+        order = @collection.at(@collection.length-1)
+        order.order_items()
+        view = new Shop.Views.OrdersNew(collection: @collection, model: order)    
 
   edit: (id, params) -> 
     params = _.strToParams(params)

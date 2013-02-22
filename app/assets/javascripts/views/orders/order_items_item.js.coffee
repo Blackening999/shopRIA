@@ -4,9 +4,9 @@ class Shop.Views.OrderItemsItem extends Backbone.View
   tagName: 'tr'
 
   events:
-    'click #destroy'  : 'destroy' 
-    'click #edit'     : 'edit'
-       
+    'click #destroy'  : 'destroy'
+    'click #edit'     : 'edit' 
+    
   initialize: ->
     @model.on('change', @render, @)
 
@@ -15,14 +15,13 @@ class Shop.Views.OrderItemsItem extends Backbone.View
     @
 
   edit: ->
-    @collection.cid = @model.cid
+    @collection.id = @model.id
 
   destroy: ->
-    _.each @collection.itemsStore, (tempModel, index) =>
-      if @model.cid == tempModel.cid
-        @collection.totalPrice -= Number(tempModel.attributes.price_per_line)
-        @collection.itemsStore.splice(index, 1)
+    $(@el).remove() if confirm 'Are you sure you want to delete this item?'
+    #if confirm 'Are you sure you want to delete this item?'
+    @collection.totalPrice -= Number(@model.attributes.price_per_line)
     $('#total_price').text(@collection.totalPrice)
-    $('#total_num_of_items').text(@collection.itemsStore.length)
-    $(@el).remove() #if confirm 'Are you sure you want to delete this item?'
+    $('#total_num_of_items').text(@model.collection.length-1)
     @model.destroy() 
+
