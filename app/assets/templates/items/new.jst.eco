@@ -1,0 +1,39 @@
+<form id="new_item" class="form-horizontal">
+   
+  <h3>Create a New Item</h3> 
+  
+
+  <h4>This page is appointed for creating new item</h4>
+  
+    
+  <fieldset>
+    <div class="control-group">
+		<label for="item_name" class="control-label">Item Name</label>
+		<div class="controls">
+		  <input name="item_name" type="text" id="item_name" class="input-large"/>
+		</div>
+    </div>
+
+    <div class="control-group">
+		<label for="item_description" class="control-label">Item Description</label>
+		<div class="controls">
+		  <input name="item_description" type="text" id="item_description" class="input-large"/>
+		</div>
+    </div>
+
+    <div class="control-group">
+		<label for="price" class="control-label">Price</label>
+		<div class="controls">
+		  <input name="price" type="text" id="price" class="input-large"/>
+		</div>
+    </div>
+	
+  </fieldset>
+
+  <div>
+	 <input type="submit" class="btn btn-success" value="Create"> 
+	 <button id="cancel" class="btn btn-success">Cancel</button> 
+	 <button id="refresh" class="btn btn-success">Refresh</button>
+  </div>
+
+</form>

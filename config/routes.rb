@@ -17,7 +17,8 @@ Shop::Application.routes.draw do
   resources :items
   
   
-  root to: "users#index"
+  #root to: "users#index"
+  root to: "items#index"
 
 
   

@@ -15,9 +15,9 @@ class Shop.Collections.Items extends Backbone.Collection
     #@init_pagination(resp)
     resp["models"]  
 
-  tempAdd: (order_item) ->
-    @itemsStore.push order_item
-    @totalPrice += Number(order_item.attributes.price_per_line)
-    {price:    @totalPrice, 
-    totalNum:  @itemsStore.length}   
+  # tempAdd: (order_item) ->
+  #   @itemsStore.push order_item
+  #   @totalPrice += Number(order_item.attributes.price_per_line)
+  #   {price:    @totalPrice, 
+  #   totalNum:  @itemsStore.length}   
     
