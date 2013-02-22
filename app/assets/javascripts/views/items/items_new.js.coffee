@@ -16,6 +16,10 @@ class Shop.Views.ItemsNew extends Backbone.View
     
   render: ->
     @$el.html(@template())   
+    @initFormValidation()
+    @
+
+  initFormValidation: ->
     @$('form').validate
       rules:
         item_name: 
@@ -31,8 +35,6 @@ class Shop.Views.ItemsNew extends Backbone.View
           required: "Item description cannot be blank!"
         price: 
           required: "Price cannot be blank!"  
-    @
-
 
   createItem: (event) ->
     event.preventDefault()    

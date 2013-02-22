@@ -14,54 +14,7 @@ class Shop.Views.OrdersNew extends Backbone.View
     @collection.on('add', @render, @)
     @itemsLoad() 
     @render()
-    @setDates()    
-
-  setDates: ->  
-    d = new Date()
-    d = d.getUTCMonth()+1 + "/" + d.getUTCDate() + "/" + d.getFullYear()
-    $(@el).find("#date_of_ordering").text(d)
-    $(@el).find("#expiry_date").val(d)
-
-  # validateForm: ->    
-  #   @checkDates()     
-    
-  #   @$('form#new_order').validate
-  #     rules:
-  #       order_number: 
-  #         required: true           
-  #       credit_card_number:
-  #         required: true
-  #         digits: true
-  #         maxlength: 16     
-  #         minlength: 16
-  #       cvv2:
-  #         required: true
-  #         digits: true
-  #         maxlength: 3     
-  #         minlength: 3
-  #       issue_number:
-  #         digits: true
-  #         maxlength: 1     
-  #         minlength: 1            
-          
-  #     messages:
-  #       order_number: 
-  #         required: "Order number cannot be blank!"
-  #       credit_card_number: 
-  #         required: "Credit card number cannot be blank!"
-  #         digits: "Credit card number should contain digits only!"
-  #         maxlength: "Credit card number should contain 16 digits!"     
-  #         minlength: "Credit card number should contain 16 digits!"
-  #       cvv2: 
-  #         required: "cvv2 cannot be blank!"
-  #         digits: "cvv2 should contain digits only!"
-  #         maxlength: "cvv2 should contain 3 digits!"     
-  #         minlength: "cvv2 should contain 3 digits!"
-  #       issue_number:
-  #         digits: "Issue number should contain digits only!"
-  #         maxlength: "Issue number should contain 1 digit"     
-  #         minlength: "Issue number should contain 1 digit"                            
-
+    @setDates()      
 
   itemsLoad: ->
     @items = new Shop.Collections.Items()
@@ -73,6 +26,27 @@ class Shop.Views.OrdersNew extends Backbone.View
     
   render: ->
     @$el.html(@template())    
+    @initFormValidation()    
+    @
+
+  setDates: ->  
+    d = new Date()
+    d = d.getUTCMonth()+1 + "/" + d.getUTCDate() + "/" + d.getFullYear()
+    $(@el).find("#date_of_ordering").text(d)
+    $(@el).find("#expiry_date").val(d)
+
+  initFormValidation: -> 
+    jQuery.validator.addMethod "checkPrefDeliveryDate", ((value, element) ->
+      pref_delivery_date = $(@el).find("#pref_delivery_date").val()
+      date_of_ordering = $(@el).find("#date_of_ordering").text()            
+      new Date(pref_delivery_date).getTime() > new Date(date_of_ordering).getTime()
+    ), "Preferable Delivery Date goes before the Date of Ordering!"
+
+    jQuery.validator.addMethod "checkExpiryDate", ((value, element) ->
+      expiry_date = $(@el).find("#expiry_date").val()
+      start_date = $(@el).find("#start_date").val()
+      new Date(start_date).getTime() < new Date(expiry_date).getTime()
+    ), "Expiry Date goes before the Start Date!"
 
     @$('form#new_order').validate
       rules:
@@ -91,7 +65,14 @@ class Shop.Views.OrdersNew extends Backbone.View
         issue_number:
           digits: true
           maxlength: 1     
-          minlength: 1            
+          minlength: 1
+        pref_delivery_date:
+          checkPrefDeliveryDate:true
+        start_date:
+          required: true
+        expiry_date:
+          required: true
+          checkExpiryDate:true
           
       messages:
         order_number: 
@@ -110,8 +91,13 @@ class Shop.Views.OrdersNew extends Backbone.View
           digits: "Issue number should contain digits only!"
           maxlength: "Issue number should contain 1 digit"     
           minlength: "Issue number should contain 1 digit" 
-    
-    @
+        pref_delivery_date:
+          checkPrefDeliveryDate: "Preferable Delivery Date goes before the Date of Ordering!"
+        start_date:
+          required: "Start Date cannot be blank!"  
+        expiry_date:
+          required: "Expiry Date cannot be blank!"
+          checkExpiryDate: "Expiry Date goes before the Start Date!"     
 
   selectItem: ->
     itm = @items.itemStore
@@ -119,19 +105,7 @@ class Shop.Views.OrdersNew extends Backbone.View
     itmPrice = Number(itm["price"])
     $(@el).find('#item_name').text(itmName)
     $(@el).find('#price').text(itmPrice)
-    $(@el).find('#quantity').val(1)  
-
-  checkDates: -> 
-    pref_delivery_date = $(@el).find("#pref_delivery_date").val()
-    date_of_ordering = $(@el).find("#date_of_ordering").text()
-    dateIsInvalid = (new Date(pref_delivery_date).getTime() < new Date(date_of_ordering).getTime())    
-    $('#pref_delivery_date').after('<label for="pref_delivery_date" generated="true" class="error">Preferable Delivery Date goes before the Date of Ordering!</label>')  if dateIsInvalid
-
-    expiry_date = $(@el).find("#expiry_date").val()
-    start_date = $(@el).find("#start_date").val()
-    startDateIsInvalid = (new Date(start_date).getTime() > new Date(expiry_date).getTime())    
-    $('#start_date').after('<label for="start_date" generated="true" class="error">Expiry Date goes before the Start Date!</label>')  if startDateIsInvalid
-   
+    $(@el).find('#quantity').val(1)    
 
   addItem: (e) ->
     e.preventDefault()
@@ -160,7 +134,6 @@ class Shop.Views.OrdersNew extends Backbone.View
     
 
   createOrder: (event) ->    
-    @validateForm()
     event.preventDefault()        
     # attributes = 
     #   order_number:       $(@el).find('#order_number').val()
