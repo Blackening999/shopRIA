@@ -15,11 +15,27 @@ class Shop.Views.ItemsNew extends Backbone.View
     @render()
     
   render: ->
-    @$el.html(@template())
+    @$el.html(@template())   
+    @$('form').validate
+      rules:
+        item_name: 
+          required: true
+        item_description: 
+          required: true             
+        price:
+          required: true
+      messages:
+        item_name: 
+          required: "Item name cannot be blank!"         
+        item_description: 
+          required: "Item description cannot be blank!"
+        price: 
+          required: "Price cannot be blank!"  
     @
 
+
   createItem: (event) ->
-    event.preventDefault()
+    event.preventDefault()    
     attributes = 
       item_name: $(@el).find('#item_name').val()
       item_description: $(@el).find('#item_description').val()

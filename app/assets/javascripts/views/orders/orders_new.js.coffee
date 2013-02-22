@@ -22,9 +22,58 @@ class Shop.Views.OrdersNew extends Backbone.View
     $(@el).find("#date_of_ordering").text(d)
     $(@el).find("#expiry_date").val(d)
 
-  validateForm: ->    
-    @checkDates()     
+  # validateForm: ->    
+  #   @checkDates()     
     
+  #   @$('form#new_order').validate
+  #     rules:
+  #       order_number: 
+  #         required: true           
+  #       credit_card_number:
+  #         required: true
+  #         digits: true
+  #         maxlength: 16     
+  #         minlength: 16
+  #       cvv2:
+  #         required: true
+  #         digits: true
+  #         maxlength: 3     
+  #         minlength: 3
+  #       issue_number:
+  #         digits: true
+  #         maxlength: 1     
+  #         minlength: 1            
+          
+  #     messages:
+  #       order_number: 
+  #         required: "Order number cannot be blank!"
+  #       credit_card_number: 
+  #         required: "Credit card number cannot be blank!"
+  #         digits: "Credit card number should contain digits only!"
+  #         maxlength: "Credit card number should contain 16 digits!"     
+  #         minlength: "Credit card number should contain 16 digits!"
+  #       cvv2: 
+  #         required: "cvv2 cannot be blank!"
+  #         digits: "cvv2 should contain digits only!"
+  #         maxlength: "cvv2 should contain 3 digits!"     
+  #         minlength: "cvv2 should contain 3 digits!"
+  #       issue_number:
+  #         digits: "Issue number should contain digits only!"
+  #         maxlength: "Issue number should contain 1 digit"     
+  #         minlength: "Issue number should contain 1 digit"                            
+
+
+  itemsLoad: ->
+    @items = new Shop.Collections.Items()
+    @items.fetch
+      success: (collection) ->
+        _.each collection.models, (model) ->
+          view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
+          $('#items tbody').append view.render().el
+    
+  render: ->
+    @$el.html(@template())    
+
     @$('form#new_order').validate
       rules:
         order_number: 
@@ -60,19 +109,8 @@ class Shop.Views.OrdersNew extends Backbone.View
         issue_number:
           digits: "Issue number should contain digits only!"
           maxlength: "Issue number should contain 1 digit"     
-          minlength: "Issue number should contain 1 digit"                            
-
-
-  itemsLoad: ->
-    @items = new Shop.Collections.Items()
-    @items.fetch
-      success: (collection) ->
-        _.each collection.models, (model) ->
-          view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
-          $('#items tbody').append view.render().el
+          minlength: "Issue number should contain 1 digit" 
     
-  render: ->
-    @$el.html(@template())    
     @
 
   selectItem: ->
