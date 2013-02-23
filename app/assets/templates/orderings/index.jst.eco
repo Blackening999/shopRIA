@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <section class="row-fluid">
+        
+    </section>
+
+<div class="panel">
+        <h5>Search by</h5>
+<form action="/orders" class="filters form-horizontal" method="GET">
+          <fieldset>
+           <div class="control-group">
+            <label for="filter" class="control-label">Filter orders by:</label>
+            <div class="controls">
+              <select id="filter_by" name="filter">
+              <option value="status">Status</option>
+              <option value="role">Role</option>                
+              </select>            
+            
+              <select id="filter_options" name="filter_options">
+              <option value="ordered">Ordered</option>
+              <option value="pending">Pending</option>
+              <option value="delivered">Delivered</option>               
+              </select>
+            </div>               
+           </div>
+          </fieldset>  
+
+          <fieldset>
+           <div class="control-group">
+            <label for="search_orders" class="control-label">Search for orders by:
+            </label>
+            <div class="controls">
+              <select id="search_orders" name="search_orders">
+              <option value="order_number">Order Name</option>
+              <option value="status">Status</option>
+              <option value="assignee">Assignee</option>
+              </select>         
+
+        <input type="text" id="filterText" name="request"> <input type="submit" id="search" class= "btn btn-primary"value="Apply">      
+            </div>   
+           </div>
+          </fieldset>  
+        </form>
+</div>
+
+
+  		<table id="orders" class="table table-condensed">
+		  <tbody>
+			<tr>
+				<th> Order Name</th>
+				<th>Total Price</th>
+				<th>Max Discount</th>
+				<th>Delivery Date</th>
+				<th>Status</th>
+				<th>Assignee</th>
+				<th>Role</th>
+				<th>Edit</th>				
+			</tr>			
+			
+          </tbody>
+		</table>
+
+		<div class="pagination pagination-centered" id="paging-buttons">       
+    	  <ul class="pager">      
+                    <li>
+                        <a id="first">First</a>
+                    </li>
+                    <li>
+                        <a id="backward">&larr; Backward</a>
+                    </li>
+          
+                    <li>
+                        <a id="forward">Forward &rarr;</a>
+                    </li>
+                    <li>
+                        <a id="last">Last</a>
+                    </li>
+          
+          </ul>            
+         </div>
+</div>		

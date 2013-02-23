@@ -16,10 +16,15 @@ window.Shop =
     new Shop.Routers.Users()
     Backbone.history.start(pushState: true)
 
+  initOrderings: -> 
+    new Shop.Routers.Orderings()
+    Backbone.history.start(pushState: true)  
+
 $(document).ready ->
   Shop.initUsers() if curUser?.role == "Administrator"
   Shop.initOrders() if curUser?.role == "Customer"
   Shop.initItems() if curUser?.role == "Supervisor"
+  Shop.initOrderings() if curUser?.role == "Merchandiser"
   
 
   

@@ -40,6 +40,7 @@ class ItemsController < ApplicationController
       #format.json { render json: { item: @item, item_items: @all_items.to_json().html_safe } }
     end
   end
+  
   def create
     @item = Item.create params[:item]
     respond_to do |format|

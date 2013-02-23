@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
     return root_path if resource.role == 'Administrator'
     return "/orders" if resource.role == 'Customer'
     return "/items" if resource.role == 'Supervisor'
+    return "/orderings" if resource.role == 'Merchandiser'
        
   end
 
