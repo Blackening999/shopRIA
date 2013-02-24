@@ -11,10 +11,12 @@ Shop::Application.routes.draw do
     end
     resources :order_items
     resources :items    
+    resources :orderings
   end
   resources :orders
   resources :order_items
   resources :items
+  resources :orderings
   
   
   root to: "users#index"

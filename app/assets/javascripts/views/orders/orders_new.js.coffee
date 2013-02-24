@@ -174,10 +174,10 @@ class Shop.Views.OrdersNew extends Backbone.View
     event.preventDefault()
     attributes = 
         order_number:       $(@el).find('#order_number').val()
-        status:             $(@el).find('#status').text('pending')      
-        totalPrice:        $(@el).find('#totalPrice').val()      
-        total_num_of_items: $(@el).find('#total_num_of_items').val()
-        date_of_ordering:   $(@el).find('#date_of_ordering').val()
+        status:             'Pending'      
+        total_price:        @items.totalPrice     
+        total_num_of_items: @model.order_items().models.length
+        date_of_ordering:   $('#date_of_ordering').val()
     @model.set attributes
     $(@el).find('#newOrder').attr("disabled", true)
     $(@el).find('#save').removeAttr("disabled")

@@ -4,6 +4,10 @@ window.Shop =
   Views: {}
   Routers: {}
 
+  initOrderings: -> 
+    new Shop.Routers.Orderings()
+    Backbone.history.start(pushState: true)
+
   initItems: -> 
     new Shop.Routers.Items()
     Backbone.history.start(pushState: true)
@@ -20,6 +24,7 @@ $(document).ready ->
   Shop.initUsers() if curUser?.role == "Administrator"
   Shop.initOrders() if curUser?.role == "Customer"
   Shop.initItems() if curUser?.role == "Supervisor"
+  Shop.initOrderings() if curUser?.role == "Merchandiser"
   
 
   

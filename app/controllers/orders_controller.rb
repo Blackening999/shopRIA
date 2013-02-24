@@ -36,7 +36,7 @@ class OrdersController < ApplicationController
     
     respond_to do |format|
       format.html # show.html.erb      
-      format.json { render json: @all_items }
+      format.json { render json: @order }
       #format.json { render json: { order: @order, order_items: @all_items.to_json().html_safe } }
     end
   end 

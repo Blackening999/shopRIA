@@ -4,6 +4,7 @@ class Shop.Collections.OrderItems extends Backbone.Collection
   model: Shop.Models.OrderItem
   
   initialize: (order_id) ->
+    @removedOrderItems = new Array()
     @order_id = order_id
     if order_id?
       @baseUrl += '/' + order_id.order_id + '/order_items' #base

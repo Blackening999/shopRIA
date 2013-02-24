@@ -24,7 +24,7 @@ class Shop.Routers.Orders extends Backbone.Router
     startAttr = 
       order_number:       Math.floor(Math.random()*(99999-10000+1))+10000
       status:             ""                  
-      totalPrice:         ""      
+      total_price:         ""      
       total_num_of_items: ""
       date_of_ordering:   ""
     #order = new Shop.Models.Order(startAttr)
@@ -33,14 +33,16 @@ class Shop.Routers.Orders extends Backbone.Router
       success: =>
         order = @collection.at(@collection.length-1)
         order.order_items()
+        console.log @collection
         view = new Shop.Views.OrdersNew(collection: @collection, model: order)    
 
-  edit: (id, params) -> 
-    params = _.strToParams(params)
+  edit: (id) -> 
+    # params = _.strToParams(params)
     order = @collection.get(id)  
-    order.order_items().setParams(params["orderBy"], params["page"], params["pp"]) if params["orderBy"]? && params["page"]? && params["pp"]?
-    view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items())
-    view.order_id = id
+    # order.order_items().setParams(params["orderBy"], params["page"], params["pp"]) if params["orderBy"]? && params["page"]? && params["pp"]?
+    # view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items())
+    # view.order_id = id
+    view = new Shop.Views.OrdersEdit(model: order, collection: @collection)
     
   editItem: (order_id,order_item_id) ->
     @collection_of_items = new Shop.Collections.Items()

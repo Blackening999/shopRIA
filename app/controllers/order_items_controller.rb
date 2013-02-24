@@ -23,7 +23,7 @@ class OrderItemsController < ApplicationController
    # }
     @order = Order.find params[:order_id] #Question 3
 
-    @all_items = @order.items.select("order_items.id,item_id,item_name,item_description,dimension,price,quantity,price_per_line")    
+    @all_items = @order.items.select("order_items.id,order_items.order_id,item_id,item_name,item_description,dimension,price,quantity,price_per_line")
     
     @all_items = @all_items.reorder(params[:orderBy]).page(params[:page]).per(params[:pp])
 
