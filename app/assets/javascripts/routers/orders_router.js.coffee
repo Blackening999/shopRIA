@@ -13,22 +13,22 @@ class Shop.Routers.Orders extends Backbone.Router
     @collection.setPageInfo($('#container').data('pagination'))
     @collection.fetch()         
     
-  index: (params) ->
-    params = _.strToParams(params)
-    if params?#["orderBy"]? && params["page"]? && params["pp"]? && params["filter_by"]? && params["filter_options"]? && params["search_orders"]? && params["request"]
-      @collection.setParams(params["orderBy"], params["page"], params["pp"], params["filter_by"], params["filter_options"], params["search_orders"], params["request"])
+  index: ->
     view = new Shop.Views.OrdersIndex(collection: @collection)    
     $('#container').html(view.render().el)
 
   newOrder: ->
     view = new Shop.Views.OrdersNew({collection: @collection})    
 
-  edit: (id, params) -> 
-    params = _.strToParams(params)
-    order = @collection.get(id)  
-    order.order_items().setParams(params["orderBy"], params["page"], params["pp"]) if params["orderBy"]? && params["page"]? && params["pp"]?
-    view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items())
-    view.order_id = id
+  edit: (id) -> 
+    # params = _.strToParams(params)
+    # order = @collection.get(id)  
+    # order.order_items().setParams(params["orderBy"], params["page"], params["pp"]) if params["orderBy"]? && params["page"]? && params["pp"]?
+    # view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items())
+    # view.order_id = id
+    order = new Shop.Models.Order({id:id})
+    order.fetch()    
+    view = new Shop.Views.OrdersEdit(model: order)
     
   editItem: (order_id,order_item_id) ->
     @collection_of_items = new Shop.Collections.Items()

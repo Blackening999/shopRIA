@@ -9,9 +9,9 @@ class Shop.Views.OrderingsEdit extends Backbone.View
      
   initialize: ->
     @model.on('change', @render, @)      
-    @render()       
+    @render()    
     @itemsLoad()
-   
+       
   render: ->    
     $(@el).html(@template(order: @model))        
     @
@@ -22,6 +22,8 @@ class Shop.Views.OrderingsEdit extends Backbone.View
         _.each collection.models, (model) ->
           orderView = new Shop.Views.OrderItemsItem(model: model)
           @$('#items_table tbody').append(orderView.render().el)
+    @render()          
+        
 
   editOrdering: (event) ->  
     event.preventDefault()

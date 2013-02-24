@@ -1,9 +1,11 @@
 class Shop.Collections.OrderItems extends Backbone.Collection
  
   baseUrl: '/api/orders' #base
-  model: Shop.Models.OrderItem
+  model: Shop.Models.OrderItem  
   
   initialize: (order_id) ->
+    @removedOrderItems = new Array()  
+   
     @order_id = order_id
     if order_id?
       @baseUrl += '/' + order_id.order_id + '/order_items' #base
