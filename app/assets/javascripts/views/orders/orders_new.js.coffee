@@ -10,23 +10,22 @@ class Shop.Views.OrdersNew extends Backbone.View
     'click .item_line'    : 'selectItem'
     'click #addItem'      : 'addItem' 
       
-  initialize: ->
-    @collection.on('add', @render, @)
-    @itemsLoad() 
+  initialize: ->    
     @render()
-    @setDates()      
-
-  itemsLoad: ->
+    @setDates()    
+    @itemsLoad()       
+  
+  itemsLoad: ->    
     @items = new Shop.Collections.Items()
     @items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
           view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
-          $('#items tbody').append view.render().el
+          $('#items tbody').append view.render().el     
     
   render: ->
     @$el.html(@template())    
-    @initFormValidation()    
+    #@initFormValidation()      
     @
 
   setDates: ->  
@@ -105,9 +104,9 @@ class Shop.Views.OrdersNew extends Backbone.View
     itmPrice = Number(itm["price"])
     $(@el).find('#item_name').text(itmName)
     $(@el).find('#price').text(itmPrice)
-    $(@el).find('#quantity').val(1)    
+    $(@el).find('#quantity').val(1)  
 
-  addItem: (e) ->
+  addItem: (e) =>
     e.preventDefault()
     itm = @items.itemStore
     itm["quantity"] = Number($(@el).find('#quantity').val())
@@ -117,36 +116,43 @@ class Shop.Views.OrdersNew extends Backbone.View
       when "Box"     then itm["price_per_line"] = itm["price"]*itm["quantity"]*5
       when "Package" then itm["price_per_line"] = itm["price"]*itm["quantity"]*10
     itmQ =
-      order_id: Number(@order_id)
+      #order_id: Number(@order_id)
+      order_id: @model.get('id')
       item_id: itm["id"] 
       quantity: itm["quantity"]
       dimension: itm["dimension"]
       price_per_line: itm["price_per_line"] 
-      item_name: itm["item_name"]
-      item_description: itm["item_description"]
-      price: itm["price"]
-    order_item = new Shop.Models.OrderItem(itmQ)
-    tmpItms = @items.tempAdd(order_item)#temporary adding model
-    $(@el).find('#total_price').text(tmpItms.price)
-    $(@el).find('#total_num_of_items').text(tmpItms.totalNum)
-    view = new Shop.Views.OrderItemsItem(model: order_item, collection: @items)
-    @$('#items_table tbody').append(view.render().el)    
-    
+      item_name: itm["item_name"] 
+      item_description: itm["item_description"] 
+      price: itm["price"] 
+    order_item = new Shop.Models.OrderItem(itmQ)    
+    @model.order_items.add(order_item)    
+    view = new Shop.Views.OrderItemsItem(model: order_item)
+    @$('#items_table tbody').append(view.render().el)         
 
   createOrder: (event) ->    
+    order_items = @model.order_items
+    $(@el).find('#status').text("Created")
     event.preventDefault()        
-    # attributes = 
-    #   order_number:       $(@el).find('#order_number').val()
-    #   status:             $(@el).find('#status').text()      
-    #   totalPrice:        $(@el).find('#totalPrice').text()      
-    #   total_num_of_items: $(@el).find('#total_num_of_items').text()
-    #   date_of_ordering:   $(@el).find('#date_of_ordering').text()
-    # @collection.create attributes,
-    #   wait: true
-    #   success: -> 
-    #     $('#new_order')[0].reset()
-    #     Backbone.history.navigate("/orders", true)            
-    #   error: @handleError
+    attributes = 
+      order_number:       $(@el).find('#order_number').val()
+      status:             $(@el).find('#status').text()     
+      user_id:            Number(curUser.id)          
+    @model.save attributes,   
+      success: (model, response) ->    
+        $('#new_order')[0].reset()
+        order_id = Number(response.id)        
+        _.each order_items.models, (oder_item) -> 
+          console.log oder_item                   
+          oder_item.set({order_id:order_id})
+          oder_item.save
+            wait: true      
+            succes: ->
+            error: @handleError             
+        @collection.add @model
+        Backbone.history.navigate("/orders", true)            
+      error: @handleError        
+     
 
   handleError: (order, response) ->
     if response.status == 422

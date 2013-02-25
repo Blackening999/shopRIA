@@ -98,8 +98,7 @@ $(function(){
 	<div class="items_panel">
         <h5>Items Selection</h5>
 		<div class="row-fluid">
-			<a href="#" id="addItemLink" class="backbone btn btn-primary">Add Item</a>
-			<a href="#myModal" role="button" class="btn" data-toggle="modal" >Add Item modal</a>
+			<a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal">Add Item</a>
 			<select class="limit pull-right">
 				<option>
 					show 10 lines

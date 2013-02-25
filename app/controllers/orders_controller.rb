@@ -41,7 +41,15 @@ class OrdersController < ApplicationController
     end
   end 
    def create
-    @order = Order.create params[:order]
+    # @order = Order.create params[:order]
+    # respond_to do |format|
+    #   format.html { redirect_to user_path(@order) }
+    #   format.json { respond_with @order }
+    # end
+
+    @user = User.find params[:user_id]    
+    
+    @order = @user.orders.create params[:order]
     respond_to do |format|
       format.html { redirect_to user_path(@order) }
       format.json { respond_with @order }

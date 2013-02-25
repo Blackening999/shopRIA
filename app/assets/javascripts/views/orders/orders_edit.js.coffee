@@ -21,7 +21,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
     $(@el).html(@template(order: @model))    
     @
 
-  orderItemsLoad: ->            
+  orderItemsLoad: ->                 
     @model.order_items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
@@ -31,6 +31,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
     @render()    
 
   itemsLoad: ->    
+    @model.items = new Shop.Collections.Items()
     @model.items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
