@@ -26,7 +26,9 @@ class Shop.Views.OrdersNew extends Backbone.View
           view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
           $('#items tbody').append view.render().el
     @order_items = @model.order_items()
-          
+    @order_items.order_id = @model.id
+    $(@el).find("#order_number").text(@model.attributes.order_number)
+                  
   setDates: ->  
     d = new Date()
     d = d.getUTCMonth()+1 + "/" + d.getUTCDate() + "/" + d.getFullYear()
@@ -128,12 +130,10 @@ class Shop.Views.OrdersNew extends Backbone.View
       success: =>
         @items.countPrice(itmQ) 
         orderItem = @order_items.at(@order_items.length-1)   
-        #console.log orderItem      
         $(@el).find('#total_price').text(@items.totalPrice)
         $(@el).find('#total_num_of_items').text(@order_items.length)
         view = new Shop.Views.OrderItemsItem(model: orderItem, collection: @items)
         @$('#items_table tbody').append(view.render().el)
-        console.log orderItem             
         
   editItem: (e) ->
     e.preventDefault()
@@ -164,21 +164,22 @@ class Shop.Views.OrdersNew extends Backbone.View
 
   saveOrder: (e) ->    
     e.preventDefault() 
-    if @model.order_items().length > 0  
-      #@validateForm()               #here need your validation like this
-      $('#new_order')[0].reset()                    #and if it's allright 
-      $(@el).find('#newOrder').removeAttr("disabled")
-      $(@el).find('#save').attr("disabled", true)
-            
-  createNewOrder: (event) ->   
-    event.preventDefault()
-    attributes = 
+    if @model.order_items().length > 0 
+      attributes = 
         order_number:       $(@el).find('#order_number').val()
-        status:             'Pending'      
+        status:             'Created'      
         total_price:        @items.totalPrice     
         total_num_of_items: @model.order_items().models.length
         date_of_ordering:   $('#date_of_ordering').val()
-    @model.set attributes
+      @model.set attributes 
+      #@validateForm()               #here need your validation like this
+    $('#new_order')[0].reset()                    #and if it's allright 
+    $(@el).find('#newOrder').removeAttr("disabled")
+    $(@el).find('#save').attr("disabled", true)
+
+  createNewOrder: (e) ->   
+    e.preventDefault()
+    @model.set({status: "Pending"})
     $(@el).find('#newOrder').attr("disabled", true)
     $(@el).find('#save').removeAttr("disabled")
     Backbone.history.navigate("/orders", true)

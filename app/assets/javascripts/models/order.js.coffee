@@ -5,13 +5,9 @@ class Shop.Models.Order extends Backbone.Model
     else
       "/api/orders"
 
-  initialize: ->
-    @_order_items = new Shop.Collections.OrderItems(order_id: @id)      
-    @_items = new Shop.Collections.Items(order_id: @id)
-
   order_items: ->
     unless @_order_items?
-      @_order_items = new Shop.Collections.OrderItems(order_id: @id)
+      @_order_items = new Shop.Collections.OrderItems({order_id: @id})
       @_order_items.fetch()
     @_order_items 
 

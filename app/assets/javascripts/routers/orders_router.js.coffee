@@ -22,18 +22,17 @@ class Shop.Routers.Orders extends Backbone.Router
 
   newOrder: ->
     startAttr = 
-      order_number:       Math.floor(Math.random()*(99999-10000+1))+10000
-      status:             ""                  
+      order_number:        Math.floor(Math.random()*(99999-10000+1))+10000
+      status:              ""                  
       total_price:         ""      
-      total_num_of_items: ""
-      date_of_ordering:   ""
-    #order = new Shop.Models.Order(startAttr)
+      total_num_of_items:  ""
+      date_of_ordering:    ""
+      user_id:             window.curUser.id
     @collection.create startAttr,
       wait: true
       success: =>
         order = @collection.at(@collection.length-1)
         order.order_items()
-        console.log @collection
         view = new Shop.Views.OrdersNew(collection: @collection, model: order)    
 
   edit: (id) -> 
