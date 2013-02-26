@@ -1,0 +1,163 @@
+<script>
+$(function(){
+  $(".datepicker").datepicker({
+    format: "dd/mm/yyyy",
+    showOn: "button",   
+    buttonText: "Click to show the calendar",
+    buttonImage: "/assets/calendar.gif",
+    buttonImageOnly: true
+   });
+});
+</script>
+
+<div class="container-fluid">
+    
+    <section class="row-fluid">
+       <h4>
+    This page is appointed for analysing customer orders and perform ordering
+     </h4>
+    </section>
+<form id="edit_ordering">   
+  <div class="items_panel">
+        <h5>Items Selection</h5>
+    <div class="row-fluid">
+      <select class="limit pull-right">
+        <option>
+          show 10 lines
+        </option>
+        <option>
+          show 25 lines
+        </option>
+      </select>
+    </div>
+    <div id="table_order_items">
+        <table id="items_table" class="table table-condensed">
+      <tbody>
+      <tr>
+        <th>
+          Item Number
+        </th>
+        <th>
+          Item Name
+        </th>
+        <th>
+          Item Description
+        </th>
+        <th>
+          Dimension
+        </th>
+        <th>
+          Price
+        </th>
+        <th>
+          Quantity
+        </th>
+        <th>
+          Price per Line
+        </th>
+        <th>
+          Edit
+        </th>
+        <th>
+          Delete
+        </th>
+      </tr>
+      </tbody>  
+    </table>  
+       </div> 
+
+         <div class="pagination pagination-centered" id="paging-buttons">       
+          <ul class="pager">           
+                      <li>
+                          <a href="#" id="first">First</a>
+                      </li>
+                      <li>
+                          <a href="#" id="backward">&larr; Backward</a>
+                      </li>
+                      <li>
+                          <a href="#" id="forward">Forward &rarr;</a>
+                      </li>
+                      <li>
+                          <a href="#" id="last">Last</a>
+                      </li>
+           </ul>            
+      </div>
+
+   </div>   
+      <div class="row-fluid">
+          <div class="items_panel span12">
+          <h5>Totals</h5>         
+      <fieldset>
+        <div class="row-fluid">
+          <label for="login_name" class="span3">Customer Name</label>
+          <label class="span3"><%= @order.get('login_name')%></label> 
+
+                <label class="span3">Status</label>                
+
+                <label class="radio span1">                
+                 <input type="radio" name="status" id="status" value="Ordered" <%="checked" if @order.get('status')== "Ordered"%>>
+                 Ordered               
+                </label>
+
+                <label class="radio span1">          
+                 <input type="radio" name="status" id="status" value="Delivered" <%="checked" if @order.get('status')== "Delivered"%>>
+                 Delivered               
+                </label>
+   
+
+        </div>
+
+        <div class="row-fluid">
+          <label for="customer_type" class="span3">Customer Type</label>
+          <label class="span3"><%= @order.get('customer_type')%></label>
+
+          <label for="delivery_date" class="span3">Delivery date</label>  
+          <input type="text" name="delivery_date" id="delivery_date" class="datepicker span2">          
+        </div>
+               
+        <div class="row-fluid">
+          <label for="order_number" class="span3">Order Number</label>
+          <label class="span3" id="order_number"><%= @order.get('order_number')%></label>  
+        </div>          
+
+        <div class="row-fluid">
+          <label for="total_price" class="span3">Total Price</label>
+          <label class="span3" id="total_price"><%= @order.get('total_price')%></label>
+        </div>
+
+        <div class="row-fluid">
+          <label for="total_number_of_items" class="span6">Total Number of Items</label>
+          <label class="span3" id="total_number_of_items"><%= @order.get('total_number_of_items')%></label>
+        </div>
+
+        <div class="row-fluid">
+          <label for="assignee" class="span3">Assignee</label>
+          <label class="span3" name="assignee"><%= @order.get('role')%></label>
+        </div>
+
+        <div class="row-fluid">
+          <label for="date_of_ordering" class="span3">Date of Ordering</label>
+          <label class="span3" name="date_of_ordering"></label>                
+        </div>
+
+        <div class="row-fluid">
+          <label for="pref_delivery_date" class="span3">Preferable Delivery Date</label>
+          <label class="span3" name="pref_delivery_date"></label>  
+        </div>                        
+      </fieldset> 
+       </div>      
+
+        
+     </div> 
+
+  <div class="row-fluid">
+    <div class="span3 offset9" >
+    <input type="submit" class="btn btn-primary" value="Save">
+    <button id="order" class="btn btn-primary">Order</button>
+    <button id="cancel" class="btn btn-primary">Cancel</button>
+    </div>
+  </div>        
+
+</form>
+
+</div>
