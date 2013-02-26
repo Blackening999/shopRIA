@@ -24,7 +24,7 @@ class Shop.Views.OrdersIndex extends Backbone.View
     Backbone.history.navigate(event.target.attributes["href"].value, true)     
     false
 
-  sortTable: (event) ->   #Question 2
+  sortTable: (event) ->   
     event.preventDefault()
     if @collection.pageInfo().orderBy.match /[a-zA-Z]+\s*desc/i
       Backbone.history.navigate(event.target.attributes["href"].value, true) 
