@@ -27,8 +27,9 @@ class Shop.Routers.Orders extends Backbone.Router
     # order.order_items().setParams(params["orderBy"], params["page"], params["pp"]) if params["orderBy"]? && params["page"]? && params["pp"]?
     # view = new Shop.Views.OrdersEdit(model: order, collection: order.order_items())
     # view.order_id = id
-    order = new Shop.Models.Order({id:id})
-    order.fetch()    
+    #order = new Shop.Models.Order({id:id})
+    #order.fetch()    
+    order = @collection.get(id)  
     view = new Shop.Views.OrdersEdit(model: order)
     
   editItem: (order_id,order_item_id) ->

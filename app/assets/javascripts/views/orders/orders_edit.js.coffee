@@ -15,7 +15,8 @@ class Shop.Views.OrdersEdit extends Backbone.View
     @model.on('change', @render, @)      
     @render()
     @orderItemsLoad()   
-    @itemsLoad()   
+    @itemsLoad()
+    @setMerchandiser()   
       
   render: ->    
     $(@el).html(@template(order: @model))    
@@ -36,7 +37,20 @@ class Shop.Views.OrdersEdit extends Backbone.View
       success: (collection) ->
         _.each collection.models, (model) ->
           view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
-          $('#items tbody').append view.render().el          
+          $('#items tbody').append view.render().el 
+
+  setMerchandiser: () ->   
+    assignee = @model.get('role')
+    console.log assignee
+    $.getJSON "/api/users.json", (data) ->
+      list = _.where(data.models, {role:"Merchandiser"}) 
+      _.each list, (m) ->
+        merch = m.login_name
+        merchId = m.id
+        selectedOption = (if (assignee is merch) then " selected" else "")
+        html = '<option value='+ '"' + merch + '"' + selectedOption + '>' + merch + '</option>'        
+        console.log html
+        $('#assignee').append(html)              
        
   selectItem: ->
     itm = @model.items.itemStore
@@ -83,6 +97,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
     event.preventDefault()
     attributes =       
       delivery_date: $(@el).find('#delivery_date').text()
+      pref_delivery_date: $(@el).find('#pref_delivery_date').val()
       role: $(@el).find('#assignee').val() 
     @model.save attributes,
       wait: true      

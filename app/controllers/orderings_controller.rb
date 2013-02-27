@@ -52,4 +52,5 @@ class OrderingsController < ApplicationController
     end
   end
   
+  
 end
