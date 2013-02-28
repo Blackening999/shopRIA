@@ -50,7 +50,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
         selectedOption = (if (assignee is merch) then " selected" else "")
         html = '<option value='+ '"' + merch + '"' + selectedOption + '>' + merch + '</option>'        
         console.log html
-        $('#assignee').append(html)              
+        $('#assignee').append(html)                       
        
   selectItem: ->
     itm = @model.items.itemStore

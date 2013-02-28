@@ -1,12 +1,12 @@
 <script>
 $(function(){
   $(".datepicker").datepicker({
-    format: "dd/mm/yyyy",
     showOn: "button",   
+    dateFormat: "yy-mm-dd",
     buttonText: "Click to show the calendar",
     buttonImage: "/assets/calendar.gif",
     buttonImageOnly: true
-   });
+   });   
 });
 </script>
 

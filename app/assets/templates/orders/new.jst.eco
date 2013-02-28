@@ -2,11 +2,11 @@
 $(function(){
   $(".datepicker").datepicker({
     showOn: "button",   
+    dateFormat: "yy-mm-dd",
     buttonText: "Click to show the calendar",
     buttonImage: "/assets/calendar.gif",
     buttonImageOnly: true
-   });
-   $( ".datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd");
+   });   
 });
 </script>
 
