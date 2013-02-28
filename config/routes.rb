@@ -17,12 +17,9 @@ Shop::Application.routes.draw do
   resources :order_items
   resources :items
   resources :orderings
+    
+  root to: "users#index"
   
-  
-  #root to: "users#index"
-  root to: "items#index"
-
-
   
 
   # The priority is based upon order of creation:

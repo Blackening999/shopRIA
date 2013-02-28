@@ -6,15 +6,15 @@ class Shop.Views.OrdersNew extends Backbone.View
 
   events:
     'submit #new_order'   : 'createOrder'
+    'click #order'        : 'setOrderStatus'
     'click #cancel'       : 'returnOnMain'
     'click .item_line'    : 'selectItem'
     'click #addItem'      : 'addItem' 
       
   initialize: ->    
     @render()    
-    @itemsLoad()
-    @setDates()
-    @setOrderNumber()
+    @itemsLoad()    
+    @setInitValues()
     @setMerchandiser()     
   
   itemsLoad: ->    
@@ -27,15 +27,34 @@ class Shop.Views.OrdersNew extends Backbone.View
     
   render: ->
     @$el.html(@template())    
-    #@initFormValidation()      
+    @initFormValidation()      
     @
 
-  setOrderNumber: () ->   
+  getTotal: ->
+    total_price = 0
+    $(".price").each ->
+      total_price += parseFloat(@innerHTML)
+    $(@el).find('#total_price').text(total_price)
+
+    total_num_of_items = 0
+    $(".quantity").each ->
+      total_num_of_items += parseFloat(@innerHTML)
+    $(@el).find('#total_num_of_items').text(total_num_of_items)  
+
+  setInitValues: () ->   
     $.getJSON "/api/orderings.json", (data) ->
       num = ((_.last(data.models)).id + 1).toString() 
       console.log num     
-      num = "0" + num while num.length < 6
-      $("#order_number").val(num)            
+      num = "0" + num while num.length < 6      
+      $("#order_number").val(num)  
+
+    d = new Date()    
+    d = d.getFullYear() + "-" + Number(d.getUTCMonth()+1) + '-' + d.getUTCDate() 
+    $(@el).find("#date_of_ordering").text(d)
+    $(@el).find("#expiry_date").val(d)
+    
+    $(@el).find('#status').text("Created")
+    $(@el).find('#order').attr("disabled", true)          
 
   setMerchandiser: () ->   
     $.getJSON "/api/users.json", (data) ->
@@ -45,14 +64,7 @@ class Shop.Views.OrdersNew extends Backbone.View
         merchId = m.id
         html = '<option value='+ '"' + merch + '">' + merch + '</option>'        
         console.log html
-        $('#assignee').append(html)
-
-  setDates: ->  
-    d = new Date()    
-    d = d.getFullYear() + "-" + Number(d.getUTCMonth()+1) + '-' + d.getUTCDate() 
-    $(@el).find("#date_of_ordering").text(d)
-    $(@el).find("#expiry_date").val(d)
-    $(@el).find('#status').text("Created")  
+        $('#assignee').append(html) 
 
   initFormValidation: -> 
     jQuery.validator.addMethod "checkPrefDeliveryDate", ((value, element) ->
@@ -85,13 +97,13 @@ class Shop.Views.OrdersNew extends Backbone.View
           digits: true
           maxlength: 1     
           minlength: 1
-        pref_delivery_date:
-          checkPrefDeliveryDate:true
+       # pref_delivery_date:
+       #   checkPrefDeliveryDate:true
         start_date:
           required: true
         expiry_date:
           required: true
-          checkExpiryDate:true
+        #  checkExpiryDate:true
           
       messages:
         order_number: 
@@ -149,7 +161,8 @@ class Shop.Views.OrdersNew extends Backbone.View
     order_item = new Shop.Models.OrderItem(itmQ)    
     @model.order_items.add(order_item)    
     view = new Shop.Views.OrderItemsItem(model: order_item)
-    @$('#items_table tbody').append(view.render().el)         
+    @$('#items_table tbody').append(view.render().el)  
+    @getTotal()       
 
   createOrder: (event) ->    
     order_items = @model.order_items    
@@ -172,7 +185,7 @@ class Shop.Views.OrdersNew extends Backbone.View
             
     @model.save attributes,   
       success: (model, response) ->    
-        $('#new_order')[0].reset()
+        #$('#new_order')[0].reset()
         order_id = Number(response.id)        
         _.each order_items.models, (oder_item) -> 
           console.log oder_item                   
@@ -182,6 +195,7 @@ class Shop.Views.OrdersNew extends Backbone.View
             succes: ->
             error: @handleError             
         collection_of_orders.add @model
+        $('#order').removeAttr("disabled", true)          
         #Backbone.history.navigate("/orders", true)            
       error: @handleError        
      
@@ -191,6 +205,17 @@ class Shop.Views.OrdersNew extends Backbone.View
       errors = $.parseJSON(response.responseText).errors
       for attribute, messages of errors
         alert "#{attribute} #{message}" for message in messages
+
+  setOrderStatus: (event) ->    
+    event.preventDefault()    
+    attributes = 
+      status: "Pending"     
+    
+    @model.save attributes,
+      succes: ->
+        #$(@el).find('#order').attr("disabled", true)
+        #$(@el).find('#save').removeAttr("disabled")
+        Backbone.history.navigate("/orders", true)      
 
   returnOnMain: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'

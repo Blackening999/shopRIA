@@ -74,7 +74,7 @@ order2=Order.create(order_number: '000002',
              pref_delivery_date: Time.now,  
              credit_card_type: "American Express")
 
-order_item21 = OrderItem.create(price_per_line: 100, quantity: 2, item_id: items[0].id)
+order_item21 = OrderItem.create(price_per_line: 100, dimension: "Box", quantity: 2, item_id: items[0].id)
 
 order2.order_items<<order_item21
 

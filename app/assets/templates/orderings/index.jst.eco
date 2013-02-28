@@ -1,4 +1,5 @@
 <div class="container-fluid">
+    
     <section class="row-fluid">
         
     </section>
@@ -41,8 +42,6 @@
           </fieldset>  
         </form>
 </div>
-
-
   		<table id="orders" class="table table-condensed">
 		  <tbody>
 			<tr>
@@ -51,30 +50,11 @@
 				<th>Max Discount</th>
 				<th>Delivery Date</th>
 				<th>Status</th>
-				<th>Assignee</th>
-				<th>Role</th>
+				<th>Assignee</th>				
 				<th>Edit</th>				
 			</tr>			
 			
           </tbody>
 		</table>
-
-		<div class="pagination pagination-centered" id="paging-buttons">       
-    	  <ul class="pager">      
-                    <li>
-                        <a id="first">First</a>
-                    </li>
-                    <li>
-                        <a id="backward">&larr; Backward</a>
-                    </li>
-          
-                    <li>
-                        <a id="forward">Forward &rarr;</a>
-                    </li>
-                    <li>
-                        <a id="last">Last</a>
-                    </li>
-          
-          </ul>            
-         </div>
+		
 </div>		

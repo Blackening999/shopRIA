@@ -1,0 +1,7 @@
+<td><%= @item.get('item_id')%></td> 
+<td><%= @item.get('item_name')%></td> 
+<td><%= @item.get('item_description') %></td> 
+<td><%= @item.get('dimension') %></td> 
+<td><%= @item.get('price') %></td> 
+<td class="quantity"><%= @item.get('quantity') %></td> 
+<td class="price"><%= @item.get('price_per_line') %></td>

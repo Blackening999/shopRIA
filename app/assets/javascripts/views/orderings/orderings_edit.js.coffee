@@ -20,7 +20,7 @@ class Shop.Views.OrderingsEdit extends Backbone.View
     @model.order_items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
-          orderView = new Shop.Views.OrderItemsItem(model: model)
+          orderView = new Shop.Views.OrderingsItemsItem(model: model)
           @$('#items_table tbody').append(orderView.render().el)
     @render()          
         
