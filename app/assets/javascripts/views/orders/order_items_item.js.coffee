@@ -9,13 +9,14 @@ class Shop.Views.OrderItemsItem extends Backbone.View
     'click #destroy' : 'destroy' 
    
   render: ->
-    $(@el).html(@template(item: @model))
+    $(@el).html(@template(item: @model, @collection))
     @
 
   goToEdit: ->   
-    order_id = Number(@model.collection.order_id.order_id)
-    Backbone.history.navigate("orders/" + order_id + "/order_items/" + @model.get("id") + "/items", true)
-
+    @parent.editItem = @model
+    $(@el).attr('id', 'deletedItem')
+    @parent.editItemEl = @el    
+   
   getTotal: ->
     total_price = $(@parentView.el).find('#total_price').text()
     total_price = total_price - @model.get('price_per_line') 
