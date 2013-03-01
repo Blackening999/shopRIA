@@ -16,7 +16,7 @@ class Shop.Views.OrdersNew extends Backbone.View
     @itemsLoad()    
     @setInitValues()
     @setMerchandiser()     
-  
+    
   itemsLoad: -> 
     order = @model
     console.log order
@@ -33,17 +33,6 @@ class Shop.Views.OrdersNew extends Backbone.View
     @$el.html(@template())    
     #@initFormValidation()      
     @
-
-  getTotal: ->
-    total_price = 0
-    $(".price").each ->
-      total_price += parseFloat(@innerHTML)
-    $(@el).find('#total_price').text(total_price)
-
-    total_num_of_items = 0
-    $(".quantity").each ->
-      total_num_of_items += parseFloat(@innerHTML)
-    $(@el).find('#total_num_of_items').text(total_num_of_items)  
 
   setInitValues: () ->   
     $.getJSON "/api/orderings.json", (data) ->
@@ -134,6 +123,15 @@ class Shop.Views.OrdersNew extends Backbone.View
           required: "Expiry Date cannot be blank!"
           checkExpiryDate: "Expiry Date goes before the Start Date!"     
 
+  getTotal: (quantity, price_per_line)  ->
+    total_price = Number($(@el).find('#total_price').text())
+    total_price = total_price + price_per_line
+    $(@el).find('#total_price').text(total_price)
+    
+    number_of_items = Number($(@el).find('#total_num_of_items').text())
+    number_of_items = number_of_items + quantity
+    $(@el).find('#total_num_of_items').text(number_of_items)
+
   selectItem: (e) ->    
     item_id = $(e.target).parent().data('id')
     @itm = @model.items.get(item_id)
@@ -145,9 +143,9 @@ class Shop.Views.OrdersNew extends Backbone.View
 
   addItem: (e) ->
     e.preventDefault()
-    price     = $(@el).find('#price').text()
+    price     = Number($(@el).find('#price').text())
     dimension = $(@el).find('#dimension :selected').val()
-    quantity  = $(@el).find('#quantity').val()  
+    quantity  = Number($(@el).find('#quantity').val())
     
     price_per_line = price*quantity
     
@@ -165,9 +163,10 @@ class Shop.Views.OrdersNew extends Backbone.View
       price            : price
     order_item = new Shop.Models.OrderItem(itmQ)    
     @model.order_items.add(order_item)    
-    view = new Shop.Views.OrderItemsItem(model: order_item)
+    view = new Shop.Views.OrderItemsItem(model: order_item, collection: @model.order_items)
+    view.parentView = @
     @$('#items_table tbody').append(view.render().el)  
-    @getTotal()       
+    @getTotal(quantity,price_per_line)       
 
   createOrder: (event) ->    
     order_items = @model.order_items    
@@ -175,19 +174,21 @@ class Shop.Views.OrdersNew extends Backbone.View
 
     event.preventDefault()        
     attributes = 
-      user_id:            Number(curUser.id)   
-      order_number:       $(@el).find('#order_number').val()
-      status:             $(@el).find('#status').text()     
-      date_of_ordering:   $(@el).find('#date_of_ordering').text()
-      pref_delivery_date: $(@el).find('#pref_delivery_date').val()    
-      role:               $(@el).find('#assignee').val()
-      credit_card_type:   $(@el).find('#credit_card_type').val()
-      credit_card_number: $(@el).find('#credit_card_number').val()
-      cvv2:               $(@el).find('#cvv2').val()
-      expiry_date:        $(@el).find('#expiry_date').val()
-      start_date:         $(@el).find('#start_date').val()
-      issue_number:       $(@el).find('#issue_number').val()
-     
+      user_id            : Number(curUser.id)   
+      order_number       : $(@el).find('#order_number').val()
+      status             : $(@el).find('#status').text()     
+      total_price        : Number($(@el).find('#total_price').text())
+      total_num_of_items : Number($(@el).find('#total_num_of_items').text())
+      date_of_ordering   : $(@el).find('#date_of_ordering').text()
+      pref_delivery_date : $(@el).find('#pref_delivery_date').val()    
+      role               : $(@el).find('#assignee').val()
+      credit_card_type   : $(@el).find('#credit_card_type').val()
+      credit_card_number : $(@el).find('#credit_card_number').val()
+      cvv2               : $(@el).find('#cvv2').val()
+      expiry_date        : $(@el).find('#expiry_date').val()
+      start_date         : $(@el).find('#start_date').val()
+      issue_number       : $(@el).find('#issue_number').val()      
+           
     id = @model.get('id')
     unless id?
       @model.save attributes,   
@@ -213,8 +214,7 @@ class Shop.Views.OrdersNew extends Backbone.View
             wait: true      
             succes: ->
             error: @handleError                      
-    
-     
+         
 
   handleError: (order, response) ->
     if response.status == 422

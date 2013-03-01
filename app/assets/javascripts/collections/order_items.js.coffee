@@ -2,7 +2,8 @@ class Shop.Collections.OrderItems extends Backbone.Collection
  
   baseUrl: '/api/orders' #base
   model: Shop.Models.OrderItem  
-  
+
+    
   initialize: (order_id) ->
     @removedOrderItems = new Array()  
    

@@ -25,10 +25,12 @@ class Shop.Views.OrdersEdit extends Backbone.View
 
   orderItemsLoad: ->  
     @model.order_items = new Shop.Collections.OrderItems({order_id: @model.get('id')})                              
+    orderEditView = @
     @model.order_items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
           orderView = new Shop.Views.OrderItemsItem(model: model, collection:collection)
+          orderView.parentView = orderEditView
           @$('#items_table tbody').append(orderView.render().el)          
     console.log @model.order_items    
     @render()    
@@ -55,6 +57,15 @@ class Shop.Views.OrdersEdit extends Backbone.View
         html = '<option value='+ '"' + merch + '"' + selectedOption + '>' + merch + '</option>'                
         $('#assignee').append(html)                       
        
+  getTotal: (quantity, price_per_line)  ->
+    total_price = Number($(@el).find('#total_price').text())
+    total_price = total_price + price_per_line
+    $(@el).find('#total_price').text(total_price)
+    
+    number_of_items = Number($(@el).find('#total_num_of_items').text())
+    number_of_items = number_of_items + quantity
+    $(@el).find('#total_num_of_items').text(number_of_items)
+
   selectItem: (e) ->
     item_id = $(e.target).parent().data('id')
     @itm = @model.items.get(item_id)
@@ -67,9 +78,9 @@ class Shop.Views.OrdersEdit extends Backbone.View
   addItem: (e) =>
     e.preventDefault()
 
-    price     = $(@el).find('#price').text()
+    price     = Number($(@el).find('#price').text())
     dimension = $(@el).find('#dimension :selected').val()
-    quantity  = $(@el).find('#quantity').val()  
+    quantity  = Number($(@el).find('#quantity').val())
     
     price_per_line = price*quantity
     
@@ -88,8 +99,10 @@ class Shop.Views.OrdersEdit extends Backbone.View
 
     order_item = new Shop.Models.OrderItem(itmQ)    
     @model.order_items.add(order_item)    
-    view = new Shop.Views.OrderItemsItem(model: order_item)
-    @$('#items_table tbody').append(view.render().el)    
+    view = new Shop.Views.OrderItemsItem(model: order_item, collection: @model.order_items)
+    view.parentView = @
+    @$('#items_table tbody').append(view.render().el)  
+    @getTotal(quantity,price_per_line)       
     
   navigateLink: (event) ->
     event.preventDefault()
@@ -103,9 +116,11 @@ class Shop.Views.OrdersEdit extends Backbone.View
   editOrder: (event) ->      
     event.preventDefault()
     attributes =       
-      delivery_date: $(@el).find('#delivery_date').text()
-      pref_delivery_date: $(@el).find('#pref_delivery_date').val()
-      role: $(@el).find('#assignee').val() 
+      delivery_date      :  $(@el).find('#delivery_date').text()
+      pref_delivery_date :  $(@el).find('#pref_delivery_date').val()
+      role               :  $(@el).find('#assignee').val() 
+      total_price        :  Number($(@el).find('#total_price').text())
+      total_num_of_items :  Number($(@el).find('#total_num_of_items').text())
     @model.save attributes,
       wait: true      
       error: @handleError      

@@ -47,8 +47,8 @@ items = Item.create([{ item_name: "Orange1", item_description: "Orange1", price:
 
 
 order1=Order.create(order_number: '000001', 
-           total_price: 10,
-           total_num_of_items: 5,
+           total_price: 90,
+           total_num_of_items: 3,
            max_discount: 0,
            status: "Ordered",         
            role: "merchandiser",
@@ -64,8 +64,8 @@ order1.order_items<<order_item1
 order1.order_items<<order_item2
 
 order2=Order.create(order_number: '000002', 
-           total_price: 10,
-           total_num_of_items: 5,
+           total_price: 100,
+           total_num_of_items: 2,
            max_discount: 0,
            status: "Ordered",         
            role: "merchandiser2",
