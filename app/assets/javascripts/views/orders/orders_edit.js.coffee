@@ -5,11 +5,12 @@ class Shop.Views.OrdersEdit extends Backbone.View
   template: JST['orders/show'] 
 
   events:    
-    'submit #edit_order'  : 'editOrder'
-    'click .backbone'     : 'navigateLink' 
-    'click #cancel'       : 'returnOnMain'
-    'click .item_line'    : 'selectItem'
-    'click #addItem'      : 'addItem' 
+    'submit #edit_order'        : 'editOrder'
+    'click #order'              : 'setOrderStatus'
+    'click .backbone'           : 'navigateLink' 
+    'click #cancel'             : 'returnOnMain'
+    'click #myModal .item_line' : 'selectItem'
+    'click #myModal #addItem'   : 'addItem' 
    
   initialize: ->
     #@model.on('change', @render, @)      
@@ -118,6 +119,11 @@ class Shop.Views.OrdersEdit extends Backbone.View
       model.destroy
         wait: true      
         error: @handleError       
+
+  setOrderStatus: (event) ->    
+    event.preventDefault()            
+    @model.save 
+    window.location.href = "/orders"
 
   handleError: (user, response) ->
     if response.status == 422

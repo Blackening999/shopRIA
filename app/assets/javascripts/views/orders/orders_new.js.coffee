@@ -5,11 +5,11 @@ class Shop.Views.OrdersNew extends Backbone.View
   template: JST['orders/new']
 
   events:
-    'submit #new_order'   : 'createOrder'
-    'click #order'        : 'setOrderStatus'
-    'click #cancel'       : 'returnOnMain'
-    'click .item_line_new': 'selectItem'
-    'click #addItemNew'   : 'addItem' 
+    'submit #new_order'               : 'createOrder'
+    'click #order'                    : 'setOrderStatus'
+    'click #cancel'                   : 'returnOnMain'
+    'click #myModalNew .item_line_new': 'selectItem'
+    'click #myModalNew #addItemNew'   : 'addItem' 
       
   initialize: ->    
     @render()    
@@ -231,7 +231,8 @@ class Shop.Views.OrdersNew extends Backbone.View
       succes: ->
         #$(@el).find('#order').attr("disabled", true)
         #$(@el).find('#save').removeAttr("disabled")
-        Backbone.history.navigate("/orders", true)      
+    #Backbone.history.navigate("/orders", true)      
+    window.location.href = "/orders"
 
   returnOnMain: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'
