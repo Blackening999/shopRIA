@@ -8,8 +8,8 @@ class Shop.Views.OrdersNew extends Backbone.View
     'submit #new_order'   : 'createOrder'
     'click #order'        : 'setOrderStatus'
     'click #cancel'       : 'returnOnMain'
-    'click .item_line'    : 'selectItem'
-    'click #addItem'      : 'addItem' 
+    'click .item_line_new': 'selectItem'
+    'click #addItemNew'   : 'addItem' 
       
   initialize: ->    
     @render()    
@@ -17,17 +17,21 @@ class Shop.Views.OrdersNew extends Backbone.View
     @setInitValues()
     @setMerchandiser()     
   
-  itemsLoad: ->    
-    @items = new Shop.Collections.Items()
-    @items.fetch
+  itemsLoad: -> 
+    order = @model
+    console.log order
+    @model.order_items = new Shop.Collections.OrderItems()                              
+    @model.items = new Shop.Collections.Items()  
+    items = @model.items         
+    @model.items.fetch
       success: (collection) ->
-        _.each collection.models, (model) ->
-          view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
-          $('#items tbody').append view.render().el     
+        _.each collection.models, (model) ->          
+          html = '<tr class = "item_line_new" data-id=' + model.get('id') + '><td>' + model.get('item_name') + '</td><td>' + model.get('item_description') + '</td></tr>'     
+          $('#items tbody').append(html)
     
   render: ->
     @$el.html(@template())    
-    @initFormValidation()      
+    #@initFormValidation()      
     @
 
   getTotal: ->
@@ -130,34 +134,35 @@ class Shop.Views.OrdersNew extends Backbone.View
           required: "Expiry Date cannot be blank!"
           checkExpiryDate: "Expiry Date goes before the Start Date!"     
 
-  selectItem: ->
-    itm = @items.itemStore
-    itmName = itm["item_name"]
-    itmPrice = Number(itm["price"])
+  selectItem: (e) ->    
+    item_id = $(e.target).parent().data('id')
+    @itm = @model.items.get(item_id)
+    itmName = @itm.get("item_name")
+    itmPrice = @itm.get("price")
     $(@el).find('#item_name').text(itmName)
     $(@el).find('#price').text(itmPrice)
     $(@el).find('#quantity').val(1)  
 
-  addItem: (e) =>
+  addItem: (e) ->
     e.preventDefault()
-    itm = @items.itemStore
-    itm["quantity"] = Number($(@el).find('#quantity').val())
-    itm["dimension"] = $(@el).find('#dimension :selected').val()
-    switch itm["dimension"]
-      when "Item"    then itm["price_per_line"] = itm["price"]*itm["quantity"]
-      when "Box"     then itm["price_per_line"] = itm["price"]*itm["quantity"]*5
-      when "Package" then itm["price_per_line"] = itm["price"]*itm["quantity"]*10
+    price     = $(@el).find('#price').text()
+    dimension = $(@el).find('#dimension :selected').val()
+    quantity  = $(@el).find('#quantity').val()  
+    
+    price_per_line = price*quantity
+    
+    switch dimension      
+      when "Box"     then price_per_line *= 5
+      when "Package" then price_per_line *= 10
     itmQ =
-      #order_id: Number(@order_id)
-      #order_id: @model.get('id')
-      order_id: 0
-      item_id: itm["id"] 
-      quantity: itm["quantity"]
-      dimension: itm["dimension"]
-      price_per_line: itm["price_per_line"] 
-      item_name: itm["item_name"] 
-      item_description: itm["item_description"] 
-      price: itm["price"] 
+      order_id         : 0
+      item_id          : @itm.get("id") 
+      quantity         : quantity
+      dimension        : dimension
+      price_per_line   : price_per_line
+      item_name        : @itm.get("item_name")
+      item_description : @itm.get("item_description")
+      price            : price
     order_item = new Shop.Models.OrderItem(itmQ)    
     @model.order_items.add(order_item)    
     view = new Shop.Views.OrderItemsItem(model: order_item)
@@ -182,8 +187,10 @@ class Shop.Views.OrdersNew extends Backbone.View
       expiry_date:        $(@el).find('#expiry_date').val()
       start_date:         $(@el).find('#start_date').val()
       issue_number:       $(@el).find('#issue_number').val()
-            
-    @model.save attributes,   
+     
+    id = @model.get('id')
+    unless id?
+      @model.save attributes,   
       success: (model, response) ->    
         #$('#new_order')[0].reset()
         order_id = Number(response.id)        
@@ -196,8 +203,17 @@ class Shop.Views.OrdersNew extends Backbone.View
             error: @handleError             
         collection_of_orders.add @model
         $('#order').removeAttr("disabled", true)          
-        #Backbone.history.navigate("/orders", true)            
+        #Backbone.history.navigate("/orders/#{order_id}/edit", true)            
       error: @handleError        
+    else
+      _.each order_items.models, (oder_item) -> 
+          console.log oder_item                   
+          oder_item.set({order_id:id})
+          oder_item.save
+            wait: true      
+            succes: ->
+            error: @handleError                      
+    
      
 
   handleError: (order, response) ->

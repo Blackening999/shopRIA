@@ -12,7 +12,7 @@ class Shop.Views.OrdersEdit extends Backbone.View
     'click #addItem'      : 'addItem' 
    
   initialize: ->
-    @model.on('change', @render, @)      
+    #@model.on('change', @render, @)      
     @render()
     @orderItemsLoad()   
     @itemsLoad()
@@ -22,22 +22,25 @@ class Shop.Views.OrdersEdit extends Backbone.View
     $(@el).html(@template(order: @model))    
     @
 
-  orderItemsLoad: ->                 
+  orderItemsLoad: ->  
+    @model.order_items = new Shop.Collections.OrderItems({order_id: @model.get('id')})                              
     @model.order_items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
           orderView = new Shop.Views.OrderItemsItem(model: model, collection:collection)
-          @$('#items_table tbody').append(orderView.render().el)
-    console.log @model.order_items     
+          @$('#items_table tbody').append(orderView.render().el)          
+    console.log @model.order_items    
     @render()    
 
   itemsLoad: ->    
-    @model.items = new Shop.Collections.Items()
+    order = @model
+    @model.items = new Shop.Collections.Items()    
+    items = @model.items
     @model.items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
-          view = new Shop.Views.ItemsItem (model: model, collection: @items)                 
-          $('#items tbody').append view.render().el 
+          html = '<tr class = "item_line" data-id=' + model.get('id') + '><td>' + model.get('item_name') + '</td><td>' + model.get('item_description') + '</td></tr>'     
+          $('#items tbody').append(html)
 
   setMerchandiser: () ->   
     assignee = @model.get('role')
@@ -48,37 +51,40 @@ class Shop.Views.OrdersEdit extends Backbone.View
         merch = m.login_name
         merchId = m.id
         selectedOption = (if (assignee is merch) then " selected" else "")
-        html = '<option value='+ '"' + merch + '"' + selectedOption + '>' + merch + '</option>'        
-        console.log html
+        html = '<option value='+ '"' + merch + '"' + selectedOption + '>' + merch + '</option>'                
         $('#assignee').append(html)                       
        
-  selectItem: ->
-    itm = @model.items.itemStore
-    itmName = itm["item_name"]
-    itmPrice = Number(itm["price"])
+  selectItem: (e) ->
+    item_id = $(e.target).parent().data('id')
+    @itm = @model.items.get(item_id)
+    itmName = @itm.get("item_name")
+    itmPrice = @itm.get("price")
     $(@el).find('#item_name').text(itmName)
     $(@el).find('#price').text(itmPrice)
-    $(@el).find('#quantity').val(1)  
+    $(@el).find('#quantity').val(1)    
 
   addItem: (e) =>
     e.preventDefault()
-    itm = @model.items.itemStore
-    itm["quantity"] = Number($(@el).find('#quantity').val())
-    itm["dimension"] = $(@el).find('#dimension :selected').val()
-    switch itm["dimension"]
-      when "Item"    then itm["price_per_line"] = itm["price"]*itm["quantity"]
-      when "Box"     then itm["price_per_line"] = itm["price"]*itm["quantity"]*5
-      when "Package" then itm["price_per_line"] = itm["price"]*itm["quantity"]*10
+
+    price     = $(@el).find('#price').text()
+    dimension = $(@el).find('#dimension :selected').val()
+    quantity  = $(@el).find('#quantity').val()  
+    
+    price_per_line = price*quantity
+    
+    switch dimension      
+      when "Box"     then price_per_line *= 5
+      when "Package" then price_per_line *= 10
     itmQ =
-      #order_id: Number(@order_id)
-      order_id: @model.get('id')
-      item_id: itm["id"] 
-      quantity: itm["quantity"]
-      dimension: itm["dimension"]
-      price_per_line: itm["price_per_line"] 
-      item_name: itm["item_name"] 
-      item_description: itm["item_description"] 
-      price: itm["price"] 
+      order_id         : @model.get('id')
+      item_id          : @itm.get("id") 
+      quantity         : quantity
+      dimension        : dimension
+      price_per_line   : price_per_line
+      item_name        : @itm.get("item_name")
+      item_description : @itm.get("item_description")
+      price            : price
+
     order_item = new Shop.Models.OrderItem(itmQ)    
     @model.order_items.add(order_item)    
     view = new Shop.Views.OrderItemsItem(model: order_item)

@@ -36,13 +36,13 @@ $(function(){
 						<tbody>
 							<tr>
 								<th>Item Name</th>
-								<th>Item Description</th>
+								<th>Item Description</th>								
 							</tr>							
 						</tbody>
 					</table>
 
 					<section class="row-fluid">
-						<button class="offset11 span1 btn btn-primary" id="addItem" data-dismiss="modal" aria-hidden="true">
+						<button class="offset11 span1 btn btn-primary" id="addItemNew" data-dismiss="modal" aria-hidden="true">
 							Add
 						</button>						
 					</section>

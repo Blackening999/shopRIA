@@ -1,9 +1,9 @@
 class Shop.Collections.Items extends Backbone.Collection
 
   model: Shop.Models.Item
-  totalPrice: 0
-  itemStore: {}
-  itemsStore: []
+  #totalPrice: 0
+  #itemStore: {}
+  #itemsStore: []
   url: '/api/items'
 
   # initialize: (order_id) ->

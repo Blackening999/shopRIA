@@ -5,17 +5,19 @@ class Shop.Models.Order extends Backbone.Model
     else
       "/api/orders"      
 
-  initialize: ->
-    if @id?     
-      @order_items = new Shop.Collections.OrderItems({order_id: @id})       
-    else
-      @order_items = new Shop.Collections.OrderItems() 
+  # initialize: ->
+  #   if @id?     
+  #     @order_items = new Shop.Collections.OrderItems({order_id: @id})       
+  #   else
+  #     @order_items = new Shop.Collections.OrderItems() 
       
 
   # order_items: ->
   #   unless @_order_items?
-  #     @_order_items = new Shop.Collections.OrderItems({order_id: @id})
-  #     @_order_items.fetch()
+  #     if @id?     
+  #       @order_items = new Shop.Collections.OrderItems({order_id: @id})               
+  #     else
+  #       @order_items = new Shop.Collections.OrderItems()       
   #   @_order_items 
 
   # items: ->

@@ -4,8 +4,7 @@ class Shop.Routers.Orders extends Backbone.Router
     "orders(/)"                           : "index"
     "orders/new(/)"                       : "newOrder"
     "orders/:id/edit(/)"                  : "edit"
-    #"orders/:id/order_items/:id/items(/)" : "editItem"
-                
+                   
   initialize: ->
     @route /orders\/?\?(.*)/, "index", @index # orders?page=10&source=public
     @route /orders\/:id\/edit\/\?(.*)/, "edit", @edit # orders/2/edit?page=10&source=public
@@ -19,6 +18,7 @@ class Shop.Routers.Orders extends Backbone.Router
 
   newOrder: ->
     order = new Shop.Models.Order()
+    console.log @collection
     view = new Shop.Views.OrdersNew(model: order,collection: @collection)    
 
   edit: (id) -> 
