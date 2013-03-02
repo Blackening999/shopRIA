@@ -87,15 +87,13 @@ $(function(){
 			  	<label class="span3"><%= @order.get('login_name')%></label>	
 
                 <label class="span3">Status</label>                
-
-                <label class="radio span1">                
-                 <input type="radio" name="status" id="status" value="Ordered" <%="checked" if @order.get('status')== "Ordered"%>>
-                 Ordered               
+                
+                <label class="checkbox span1">
+                  <input type="checkbox" name="status" id="checkOrdered" <%="checked" if @order.get('status')== "Ordered"%>>Ordered
                 </label>
 
-                <label class="radio span1">          
-                 <input type="radio" name="status" id="status" value="Delivered" <%="checked" if @order.get('status')== "Delivered"%>>
-                 Delivered               
+                <label class="checkbox span1">
+                  <input type="checkbox" name="status" id="checkDelivered" <%="checked" if @order.get('status')== "Delivered"%>>Delivered
                 </label>
    
 			  	  			     
@@ -120,8 +118,8 @@ $(function(){
 			  </div>
 
 			  <div class="row-fluid">
-			    <label for="total_number_of_items" class="span6">Total Number of Items</label>
-			  	<label class="span3" id="total_number_of_items"><%= @order.get('total_number_of_items')%></label>
+			    <label for="total_number_of_items" class="span3">Total Number of Items</label>
+			  	<label class="span3" id="total_number_of_items"><%= @order.get('total_num_of_items')%></label>
 			  </div>
 
 			  <div class="row-fluid">
@@ -131,23 +129,20 @@ $(function(){
 
 			  <div class="row-fluid">
 			    <label for="date_of_ordering" class="span3">Date of Ordering</label>
-			  	<label class="span3" name="date_of_ordering"></label>                
+			  	<label class="span3" name="date_of_ordering"><%= @order.get('date_of_ordering')%></label>                
 			  </div>
 			  
 			  <div class="row-fluid">
 			    <label for="pref_delivery_date" class="span3">Preferable Delivery Date</label>
-			  	<label class="span3" name="pref_delivery_date"></label>  
+			  	<label class="span3" name="pref_delivery_date"><%= @order.get('pref_delivery_date')%></label>  
 			  </div>	  			  			  	  
 		  </fieldset> 
-       </div>      
-
-        
+       </div>              
 	   </div>	
 
 	<div class="row-fluid">
-    <div class="span3 offset9" >
-		<input type="submit" class="btn btn-primary" value="Save">
-		<button id="order" class="btn btn-primary">Order</button>
+    <div class="span2 offset10" >
+		<input type="submit" class="btn btn-primary" value="Save">		
 		<button id="cancel" class="btn btn-primary">Cancel</button>
     </div>
   </div>        
