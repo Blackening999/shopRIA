@@ -34,5 +34,5 @@ class Order < ActiveRecord::Base
     )
   }
   
-  paginates_per 5
+  paginates_per 1
 end

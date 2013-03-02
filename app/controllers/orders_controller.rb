@@ -2,16 +2,16 @@ class OrdersController < ApplicationController
   respond_to :html, :json
 
   def index
-    #if params[:filter_by]
-      #@orders = Order.filter_by(params[:filter_by], params[:filter_options])
-      #if params[:request] != ""
-        #@orders = @orders.filter_by(params[:filter_by], params[:request])
-      #end
-    #else  
-      #@orders = Order.scoped
-    #end
+    if params[:filter_by]
+      @orders = Order.filter_by(params[:filter_by], params[:filter_options])
+      if params[:request] != ""
+        @orders = @orders.filter_by(params[:filter_by], params[:request])
+      end
+    else  
+      @orders = Order.scoped
+    end
 
-    @orders = Order.reorder(params[:orderBy]).page(params[:page]).per(params[:pp])
+    @orders = @orders.reorder(params[:orderBy]).page(params[:page]).per(params[:pp])
 
     @pagination = {
       page:         @orders.current_page,
