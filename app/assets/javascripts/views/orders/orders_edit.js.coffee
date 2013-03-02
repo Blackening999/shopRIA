@@ -6,19 +6,26 @@ class Shop.Views.OrdersEdit extends Backbone.View
 
   events:    
     'submit #edit_order'        : 'editOrder'
-    'click #order'              : 'setOrderStatus'
-    'click .backbone'           : 'navigateLink' 
+    'click #order'              : 'setOrderStatus'    
     'click #cancel'             : 'returnOnMain'
-    'click #myModal .item_line' : 'selectItem'
-    'click #myModal #addItem'   : 'addItem' 
+
+    'click #mAdd .item_line'    : 'selectAddItem'
+    'click #mAdd #addItem'      : 'addItem'
+    'click #mAdd #remove'       : 'clearFields'  
+
+    'click #mEdit .item_line'   : 'selectEditItem'
+    'click #mEdit #editItem'    : 'editItem' 
+    'click #mEdit #cancelEdit'  : 'cancelEdit' 
+    'click #mEdit #remove'      : 'clearFields'
+
    
   initialize: ->
     #@model.on('change', @render, @)      
     @render()
     @orderItemsLoad()   
     @itemsLoad()
-    @setMerchandiser()   
-      
+    @setMerchandiser()
+        
   render: ->    
     $(@el).html(@template(order: @model))    
     @
@@ -26,11 +33,13 @@ class Shop.Views.OrdersEdit extends Backbone.View
   orderItemsLoad: ->  
     @model.order_items = new Shop.Collections.OrderItems({order_id: @model.get('id')})                              
     orderEditView = @
+    orderEditModel = @model
     @model.order_items.fetch
       success: (collection) ->
         _.each collection.models, (model) ->
           orderView = new Shop.Views.OrderItemsItem(model: model, collection:collection)
-          orderView.parentView = orderEditView
+          orderView.parentView = orderEditView          
+          orderView.parent = orderEditModel
           @$('#items_table tbody').append(orderView.render().el)          
     console.log @model.order_items    
     @render()    
@@ -66,21 +75,35 @@ class Shop.Views.OrdersEdit extends Backbone.View
     number_of_items = number_of_items + quantity
     $(@el).find('#total_num_of_items').text(number_of_items)
 
-  selectItem: (e) ->
+   clearFields: ->
+    $(@el).find('#item_name').text("")
+    $(@el).find('#price').text("")
+    $(@el).find('#quantity').val(1)  
+
+  selectAddItem: (e) ->
     item_id = $(e.target).parent().data('id')
     @itm = @model.items.get(item_id)
     itmName = @itm.get("item_name")
     itmPrice = @itm.get("price")
-    $(@el).find('#item_name').text(itmName)
-    $(@el).find('#price').text(itmPrice)
-    $(@el).find('#quantity').val(1)    
+    $(@el).find('#mAdd #item_name').text(itmName)
+    $(@el).find('#mAdd #price').text(itmPrice)
+    $(@el).find('#mAdd #quantity').val(1)
+
+  selectEditItem: (e) ->
+    item_id = $(e.target).parent().data('id')
+    @itm = @model.items.get(item_id)
+    itmName = @itm.get("item_name")
+    itmPrice = @itm.get("price")
+    $(@el).find('#mEdit #item_name').text(itmName)
+    $(@el).find('#mEdit #price').text(itmPrice)
+    $(@el).find('#mEdit #quantity').val(1)          
 
   addItem: (e) =>
     e.preventDefault()
 
-    price     = Number($(@el).find('#price').text())
-    dimension = $(@el).find('#dimension :selected').val()
-    quantity  = Number($(@el).find('#quantity').val())
+    price     = Number($(@el).find('#mAdd #price').text())
+    dimension = $(@el).find('#mAdd #dimension :selected').val()
+    quantity  = Number($(@el).find('#mAdd #quantity').val())
     
     price_per_line = price*quantity
     
@@ -100,14 +123,49 @@ class Shop.Views.OrdersEdit extends Backbone.View
     order_item = new Shop.Models.OrderItem(itmQ)    
     @model.order_items.add(order_item)    
     view = new Shop.Views.OrderItemsItem(model: order_item, collection: @model.order_items)
-    view.parentView = @
+    view.parentView = @    
+    view.parent = @model
     @$('#items_table tbody').append(view.render().el)  
     @getTotal(quantity,price_per_line)       
+
+  editItem: (e) =>
+    e.preventDefault()
+
+    price     = Number($(@el).find('#mEdit #price').text())
+    dimension = $(@el).find('#mEdit #dimension :selected').val()
+    quantity  = Number($(@el).find('#mEdit #quantity').val())
     
-  navigateLink: (event) ->
-    event.preventDefault()
-    Backbone.history.navigate(event.target.attributes["href"].value, true)     
-    false
+    price_per_line = price*quantity
+    
+    switch dimension      
+      when "Box"     then price_per_line *= 5
+      when "Package" then price_per_line *= 10
+    itmQ =
+      order_id         : @model.get('id')
+      item_id          : @itm.get("id") 
+      quantity         : quantity
+      dimension        : dimension
+      price_per_line   : price_per_line
+      item_name        : @itm.get("item_name")
+      item_description : @itm.get("item_description")
+      price            : price
+
+    order_item = new Shop.Models.OrderItem(itmQ)  
+    
+    @model.order_items.remove(@model.editItem)  
+    @model.order_items.removedOrderItems.push(@model.editItem)   
+
+    @model.order_items.add(order_item)    
+    
+    view = new Shop.Views.OrderItemsItem(model: order_item, collection: @model.order_items)
+    view.parentView = @    
+    view.parent = @model
+    @$('#items_table tbody').append(view.render().el)  
+    $(@el).find('#deletedItem').remove() 
+    @getTotal(quantity,price_per_line)   
+    
+  cancelEdit: ->    
+    $(@el).find('#deletedItem').removeAttr("id")
   
   returnOnMain: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'

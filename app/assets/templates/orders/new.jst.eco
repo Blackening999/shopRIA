@@ -14,10 +14,7 @@ $(function(){
     
     <!-- Modal Add -->
 			<div id="modalAdd" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 60%;">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-						×
-					</button>
+				<div class="modal-header">					
 					<h3 id="myModalLabel">Item Search</h3>
 				</div>
 				<div class="modal-body">
@@ -82,10 +79,7 @@ $(function(){
 
      <!-- Modal Edit -->
 			<div id="modalEdit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 60%;">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-						×
-					</button>
+				<div class="modal-header">					
 					<h3 id="myModalLabel">Item Edit</h3>
 				</div>
 				<div class="modal-body">

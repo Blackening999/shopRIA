@@ -16,6 +16,7 @@ class Shop.Views.OrdersNew extends Backbone.View
     'click #modalEdit .item_line_new' : 'selectEditItem'
     'click #modalEdit #editItem'      : 'editItem' 
     'click #modalEdit #cancelEdit'    : 'cancelEdit' 
+    'click #modalEdit #remove'        : 'clearFields'
     
     
   initialize: ->    
@@ -23,7 +24,8 @@ class Shop.Views.OrdersNew extends Backbone.View
     @itemsLoad()    
     @setInitValues()
     @setMerchandiser()     
-    
+
+        
   itemsLoad: -> 
     order = @model
     console.log order
@@ -218,6 +220,7 @@ class Shop.Views.OrdersNew extends Backbone.View
 
     view = new Shop.Views.OrderItemsItem(model: order_item, collection: @model.order_items)
     view.parentView = @
+    view.parent = @model
     @$('#items_table tbody').append(view.render().el) 
     $(@el).find('#deletedItem').remove() 
     console.log @model.editItemEl
