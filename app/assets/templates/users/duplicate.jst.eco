@@ -1,0 +1,28 @@
+<form id="duplicate_user">
+
+
+<h2>Duplicate existing User</h2>  
+<h4>This page is appointed for duplicating existing user</h4>
+
+<div class="row-fluid">
+  <label for="user_name" class="span2">Login Name</label>
+  <input type="text" class="span3" name="login_name" id="new_login_name"/>
+</div>
+
+<div class="row-fluid">
+  <label for="password" class="span2">Password</label>
+  <input type="password" class="span3" name="password" id="new_password"/>
+</div>
+
+<div class="row-fluid">
+<label for="confirm_password" class="span2">Confirm Password</label>
+<input type="password" class="span3" name="password_confirmation" id="new_confirmPassword"/><br/>
+</div>
+
+<div class="paging-buttons">
+	<input type="submit" class="btn btn-success" value="Duplicate">
+	<button id="cancel" class="btn btn-success">Cancel</button>
+	<button id="refresh" class="btn btn-success">Refresh</button>
+</div>
+
+</form>

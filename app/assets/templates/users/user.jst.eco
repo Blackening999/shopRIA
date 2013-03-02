@@ -1,0 +1,9 @@
+<td><%= @user.get('login_name') %></td> 
+<td><%= @user.get('first_name') %></td>
+<td><%= @user.get('last_name') %></td> 
+<td><%= @user.get('role') %></td>
+<td><%= @user.get('email') %></td>
+<td><%= @user.get('region') %></td>
+<td><div id="edit" class= "btn"><i class="icon-edit"></i></div></td>
+<td><div id="destroy" class="btn"><i class="icon-trash"></i></div></td>
+<td><div id="duplicate" class="btn"><i class="icon-file"></i></div></td>

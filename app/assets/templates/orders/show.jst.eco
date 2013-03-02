@@ -1,0 +1,321 @@
+<script>
+$(function(){
+  $(".datepicker").datepicker({
+    showOn: "button",   
+    dateFormat: "yy-mm-dd",
+    buttonText: "Click to show the calendar",
+    buttonImage: "/assets/calendar.gif",
+    buttonImageOnly: true
+   });   
+});
+</script>
+
+<div class="container-fluid">
+    
+    <!-- Modal -->
+			<div id="mAdd" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 60%;">
+				<div class="modal-header">
+					<h3 id="myModalLabel">Item Search</h3>
+				</div>
+				<div class="modal-body">
+					
+					<form action="/" class="filters form-inline">
+						<label>Search for Item by:</label>
+						<select id="filterField" name="fields">
+							<option value="item_name"> Item Name </option>
+							<option value="item_description"> Item Description </option>
+						</select>
+						<input type="text" id="filterText" name="request">
+						<input type="submit" id="search" class= "btn btn-primary"value="Search">
+					</form>
+
+					<table id="items" class="table table-condensed table-hover">
+						<tbody>
+							<tr>
+								<th>Item Name</th>
+								<th>Item Description</th>
+							</tr>							
+						</tbody>
+					</table>
+					
+					<div class="panel">
+						<fieldset>
+							<div class="row-fluid">
+								<label for="item_name" class="span2">Item</label>
+								<label class="span3 pull-left" name="item_name" id="item_name"></label>
+							</div>
+							<div class="row-fluid">
+								<label class="span2">Price</label>
+								<label class="span3" name="price" id="price"></label>
+							</div>
+							<div class="row-fluid">
+								<label for="quantity" class="span2">Quantity</label>
+								<input type="text" class="span3" name="quantity" id="quantity">
+							</div>
+							<div class="row-fluid">
+								<label for="dimension" class="span2">Dimension</label>
+								<select name="dimension" class="span3" id="dimension">
+									<option value="Item">Item</option>
+									<option value="Box">Box</option>
+									<option value="Package">Package</option>
+								</select>
+							</div>
+						</fieldset>
+					</div>
+
+					
+				</div>
+				<div class="modal-footer">
+					<button id="remove" class="btn btn-primary">
+						Remove
+					</button>
+					<button class="btn btn-primary" id="addItem" data-dismiss="modal" aria-hidden="true">
+						Done
+					</button>
+					<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+						Cancel
+					</button>	
+				</div>
+			</div>
+    
+    <!-- Modal Edit -->
+			<div id="mEdit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 60%;">
+				<div class="modal-header">					
+					<h3 id="myModalLabel">Item Edit</h3>
+				</div>
+				<div class="modal-body">
+
+					<form action="/" class="filters form-inline">
+						<label>Search for Item by:</label>
+						<select id="filterField" name="fields">
+							<option value="item_name"> Item Name </option>
+							<option value="item_description"> Item Description </option>
+						</select>
+						<input type="text" id="filterText" name="request">
+						<input type="submit" id="search" class= "btn btn-primary"value="Search">
+					</form>
+
+					<table id="items" class="table table-condensed table-hover">
+						<tbody>
+							<tr>
+								<th>Item Name</th>
+								<th>Item Description</th>								
+							</tr>							
+						</tbody>
+					</table>
+					
+					<div class="panel">
+						<fieldset>
+							<div class="row-fluid">
+								<label for="item_name" class="span2">Item</label>
+								<label class="span3 pull-left" name="item_name" id="item_name"></label>
+							</div>
+							<div class="row-fluid">
+								<label class="span2">Price</label>
+								<label class="span3" name="price" id="price"></label>
+							</div>
+							<div class="row-fluid">
+								<label for="quantity" class="span2">Quantity</label>
+								<input type="text" class="span3" name="quantity" id="quantity">
+							</div>
+							<div class="row-fluid">
+								<label for="dimension" class="span2">Dimension</label>
+								<select name="dimension" class="span3" id="dimension">
+									<option value="Item">Item</option>
+									<option value="Box">Box</option>
+									<option value="Package">Package</option>
+								</select>
+							</div>
+						</fieldset>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button id="remove" class="btn btn-primary">
+						Remove
+					</button>
+					<button class="btn btn-primary" id="editItem" data-dismiss="modal" aria-hidden="true">
+						Done
+					</button>
+					<button id= "cancelEdit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+						Cancel
+					</button>	
+				</div>
+			</div>
+
+
+    <section class="row-fluid">
+       <h4>
+		This page is appointed for selecting and buying products
+	   </h4>
+    </section>
+<form id="edit_order">		
+	<div class="items_panel">
+        <h5>Items Selection</h5>
+		<div class="row-fluid">
+			<a href="#mAdd" role="button" class="btn btn-primary" data-toggle="modal">Add Item</a>			
+			<select class="limit pull-right">
+				<option>
+					show 10 lines
+				</option>
+				<option>
+					show 25 lines
+				</option>
+			</select>
+		</div>
+		<div id="table_order_items">
+        <table id="items_table" class="table table-condensed">
+		  <tbody>
+			<tr>
+				<th>
+					Item Number
+				</th>
+				<th>
+					Item Name
+				</th>
+				<th>
+					Item Description
+				</th>
+				<th>
+					Dimension
+				</th>
+				<th>
+					Price
+				</th>
+				<th>
+					Quantity
+				</th>
+				<th>
+					Price per Line
+				</th>
+				<th>
+					Edit
+				</th>
+				<th>
+					Delete
+				</th>
+			</tr>
+		  </tbody>	
+		</table>  
+       </div> 
+		<div class="pagination pagination-centered" id="paging-buttons">       
+	    	  <ul class="pager">                
+                    <li>
+                        <a id="first">First</a>
+                    </li>
+                    <li>
+                        <a id="backward">&larr; Backward</a>
+                    </li>
+                    <li>
+                        <a id="forward">Forward &rarr;</a>
+                    </li>
+                    <li>
+                        <a id="last">Last</a>
+                    </li>          
+          </ul>            
+	    </div>
+	 </div>   
+	    <div class="row-fluid">
+          <div class="items_panel span6">
+          <h5>Totals</h5>         
+		  <fieldset>
+			  <div class="row-fluid">
+			  	<label for="order_number" class="span6">Order Number</label>
+			  	<input class="span6" name="order_number" id="order_number" value=<%=@order.get('order_number') %>>	
+			  </div>	
+
+			  <div class="row-fluid"> 
+			    <label class="span6">Status</label>
+			  	<label class="span6" id="status"><%= @order.get('status') %></label>
+			  </div>
+
+			  <div class="row-fluid">
+			    <label for="total_price" class="span6">Total Price</label>
+			  	<label class="span6" id="total_price"><%= @order.get('total_price') %></label>
+			  </div>
+			  <div class="row-fluid">
+			    <label for="total_num_of_items" class="span6">Number of Items</label>
+			  	<label class="span6" id="total_num_of_items"><%= @order.get('total_num_of_items') %></label>
+			  </div>
+			  <div class="row-fluid">
+			    <label for="date_of_ordering" class="span6">Date of Ordering</label>
+			  	<label class="span6" id="date_of_ordering"><%= @order.get('date_of_ordering') %></label>
+			  </div>
+			  <div class="row-fluid">
+			    <label for="pref_delivery_date" class="span6">Pref. delivery date</label>	
+			    <input type="text" id="pref_delivery_date" class="datepicker" value="<%= @order.get('pref_delivery_date')%>">				  
+			  </div>
+			  <div class="row-fluid">
+			    <label for="delivery_date" class="span6">Delivery date</label>
+			  	<label class="span6" id="delivery_date"><%= @order.get('delivery_date') %></label>
+			  </div>
+			  <div class="row-fluid">
+			    <label for="assignee" class="span6">Assignee</label>
+			  	<select name="assignee" class="span6" id="assignee">			  	 
+			  	</select>
+			  </div> 			  
+		  </fieldset> 
+       </div>      
+
+        <div class="items_panel span6"><h5>Cards</h5>
+          <fieldset>			                
+              <div class="row-fluid">	
+		  	  	<label for="credit_card_type" class="span6">Credit Card Type*</label>
+		  	  	
+		  	  	<select name="credit_card_type" class="span6" id="credit_card_type">                       
+	                <option value="Visa" <%="selected" if @order.get('credit_card_type')== "Visa"%>>Visa</option>
+	                <option value="MasterCard" <%="selected" if @order.get('credit_card_type')== "MasterCard"%>>MasterCard</option>
+	                <option value="American Express" <%="selected" if @order.get('credit_card_type')== "American Express"%>>American Express</option>
+	                <option value="Maestro" <%="selected" if @order.get('credit_card_type')== "Maestro"%>>Maestro</option>
+		  	  	</select>
+		      </div>
+
+		      <div class="row-fluid">
+			  	<label for="credit_card_number" class="span6">Credit Card Number*</label>
+			  	<input class="span6" name="credit_card_number" value=<%= @order.get('credit_card_number')%>>	
+			  </div>
+
+			  <div class="row-fluid">
+			  	<label for="cvv2" class="span6">CVV2 Code(What is this?)*</label>
+			  	<input class="span6" name="cvv2" value=<%= @order.get('cvv2')%>>	
+			  </div>
+
+			  <div class="row-fluid">
+			    <label for="pref_delivery_date" class="span6">Pref. delivery date</label>  	
+			    <input type="text" class="datepicker" name="pref_delivery_date" value=<%= @order.get('pref_delivery_date')%>>		  
+			  </div>
+
+			  <div class="row-fluid">
+			  	<label for="start_date" class="span6">Start date(Maestro only)*</label>
+			  	<input type="text" class="datepicker" name="start_date" value=<%= @order.get('start_date')%>> 	
+			  </div>
+
+		      <div class="row-fluid">
+		        <label for="issue_number" class="span6">Issue number(Maestro only)*</label>
+		  	    <input class="span6" name="issue_number" value=<%= @order.get('issue_number')%>>
+		      </div>
+
+		      <div class="row-fluid">
+		        <label class="hidden span12"></label>		  	    
+		      </div>              
+
+		      <div class="row-fluid">
+		        <label class="pull-right">Fields are mandatory*</label>  
+		      </div>    
+
+
+		  </fieldset>	  	 
+        </div>
+	   </div>	
+
+	<div class="row-fluid">
+    <div class="span3 offset9" >
+		<input type="submit" class="btn btn-primary" value="Save">
+		<button id="order" class="btn btn-primary">Order</button>
+		<button id="cancel" class="btn btn-primary">Cancel</button>
+    </div>
+  </div>        
+	
+</form>
+
+</div>

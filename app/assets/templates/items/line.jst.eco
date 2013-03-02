@@ -1,0 +1,5 @@
+<td><%= @item.get('item_name')%></td> 
+<td><%= @item.get('item_description')%></td> 
+<td><%= @item.get('price')%></td> 
+<td><div id="edit" class= "btn"><i class="icon-edit"></i></div></td>
+<td><div id="destroy" class="btn"><i class="icon-trash"></i></div></td>

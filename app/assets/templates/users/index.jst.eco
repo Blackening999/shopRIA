@@ -1,0 +1,122 @@
+<div class="container-fluid">
+    <header class="row-fluid">
+        <h4>
+            This page is appointed for creating new and managing existing users
+        </h4>
+    </header>
+    <section class="row-fluid">
+        <a id="user_create_button" >Create New User</a>
+    </section>
+    <div>
+        Number of Found Users: <%= @pageInfo.totalCount %>
+    </div>
+    
+    <div class="panel">
+        <h4>
+            Search by
+        </h4><label>Field Filter</label><br>
+        <form action="/" class="filters form-inline">
+            <select id="filterField" name="fields">
+            <option value="login_name">
+                    User Name
+                </option>
+                <option value="all_columns">
+                    All Columns
+                </option>
+                <option value="first_name">
+                    First Name
+                </option>
+                <option value="last_name">
+                    Last Name
+                </option>
+                <option value="role">
+                    Role
+                </option>
+            </select> 
+            <select id="filterWith" name="scope">
+            <option value="start_with">
+                    starts with
+                </option>
+                <option value="equals">
+                    equals
+                </option>
+                <option value="not_equal_to">
+                    not equal to
+                </option>
+                <option value="contains">
+                    contains
+                </option>
+                <option value="does_not_contain">
+                    does not contain
+                </option>
+            </select> 
+            <input type="text" id="filterText" name="request"> <input type="submit" id="search" class= "btn btn-primary"value="Search">
+        </form>
+    </div>
+    <div class="paging">
+        <% if @pageInfo.perPage != 25: %><a class="setTwentyfive" href="#">Show 25 items</a> <% end %> <% if @pageInfo.perPage != 10: %> <a class="setTen" href="#">Show 10 items</a> <% end %>
+    </div>
+    <table id="users" class="table table-condensed">
+        <tbody>
+            <tr>
+                <th id="forSort" class="forSort">
+                    User name
+                </th>
+                <th id="forSort" class="forSort">
+                    First name
+                </th>
+                <th id="forSort" class="forSort">
+                    Last name
+                </th>
+                <th id="forSort" class="forSort">
+                    Role
+                </th>
+                <th id="forSort" class="forSort">
+                    Email
+                </th>
+                <th id="forSort" class="forSort">
+                    Region
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Remove
+                </th>
+                <th>
+                    Duplicate
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div id="paging-title">
+            Page #: <%= @pageInfo.currentPage %> from <%= @pageInfo.numPages %>
+    </div>
+    <div class="pagination pagination-centered" id="paging-buttons">
+
+        
+            
+    <ul class="pager">
+
+        <% if @pageInfo.currentPage != 1: %>
+
+                    <li>
+                        <a href="#" id="first">First</a>
+                    </li>
+                    <li>
+                        <a href="#" id="backward">&larr; Backward</a>
+                    </li>
+        <% end %>
+        <% if @pageInfo.currentPage != @pageInfo.numPages: %>
+                    <li>
+                        <a href="#" id="forward">Forward &rarr;</a>
+                    </li>
+                    <li>
+                        <a href="#" id="last">Last</a>
+                    </li>
+        <% end %>
+                </ul>
+            
+         </div>
+</div>

@@ -1,0 +1,14 @@
+<p>
+  <b>Name:</b>
+  <%= @user.get('first_name') %>
+  <%= @user.get('lastName') %>
+</p>
+
+<p>
+  <b>Role:</b>
+  <%= @user.get('role') %>
+</p>
+
+<button id="back">Back</button>
+<button id="edit">Edit</button>
+<button id="destroy">Destroy</button>

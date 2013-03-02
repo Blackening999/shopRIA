@@ -1,0 +1,9 @@
+<td><%= @order.get('order_number') %></td> 
+<td><%= @order.get('total_price') %></td> 
+<td><%= @order.get('max_discount') %></td> 
+<td><%= @order.get('delivery_date') %></td> 
+<td><%= @order.get('status') %></td> 
+<td><%= @order.get('assignee') %></td> 
+<td><%= @order.get('role') %></td> 
+<td><div id="edit" class= "btn"><i class="icon-edit"></i></div></td>
+<td><div id="destroy" class="btn"><i class="icon-trash"></i></div></td>

@@ -1,0 +1,9 @@
+<td><%= @item.item_id %></td> 
+<td><%= @item.item_name %></td> 
+<td><%= @item.item_description %></td> 
+<td><%= @item.dimension %></td> 
+<td><%= @item.price %></td> 
+<td><%= @item.quantity %></td> 
+<td><%= @item.price_per_line %></td> 
+<td><div id="edit" class= "btn"><i class="icon-edit"></i></div></td>
+<td><div id="destroy" class="btn"><i class="icon-trash"></i></div></td>
