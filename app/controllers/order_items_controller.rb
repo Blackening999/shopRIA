@@ -21,9 +21,9 @@ class OrderItemsController < ApplicationController
      # per_page:     @order_items.limit_value,
      # total_count:  order_item.count,
    # }
-    @order = Order.find params[:order_id] #Question 3
+    @order = Order.find params[:order_id]
 
-    @all_items = @order.items.select("order_items.id,order_items.order_id,item_id,item_name,item_description,dimension,price,quantity,price_per_line")
+    @all_items = @order.items.select("order_items.id,order_items.order_id,item_id,item_name,item_description,dimension,price,quantity,price_per_line")    
     
     @all_items = @all_items.reorder(params[:orderBy]).page(params[:page]).per(params[:pp])
 
@@ -65,6 +65,7 @@ class OrderItemsController < ApplicationController
   end
 
   def update
+    #OrderItem.destroy_all(:order_id => params[:order_id])
     @order_item = OrderItem.find params[:id]
     @order_item.update_attributes params[:order_item]
     respond_to do |format|
