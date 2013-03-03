@@ -55,6 +55,15 @@ class Shop.Views.OrdersEdit extends Backbone.View
           html = '<tr class = "item_line" data-id=' + model.get('id') + '><td>' + model.get('item_name') + '</td><td>' + model.get('item_description') + '</td></tr>'     
           $('#items tbody').append(html)
 
+        $("#items").dataTable
+          bPaginate: false
+          bLengthChange: false
+          bFilter: true
+          bSort: false
+          bInfo: false
+          bAutoWidth: false
+          aoColumns: [null, null]  
+
   setMerchandiser: () ->   
     assignee = @model.get('role')
     console.log assignee

@@ -6,6 +6,7 @@
 //= require underscore
 //= require backbone
 //= require jquery.validate.js
+//= require jquery.dataTables.js
 //= require shop
 //= require_tree ./helpers
 //= require_tree ../templates

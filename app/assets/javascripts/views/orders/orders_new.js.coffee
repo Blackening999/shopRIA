@@ -35,7 +35,17 @@ class Shop.Views.OrdersNew extends Backbone.View
       success: (collection) ->
         _.each collection.models, (model) ->          
           html = '<tr class = "item_line_new" data-id=' + model.get('id') + '><td>' + model.get('item_name') + '</td><td>' + model.get('item_description') + '</td></tr>'     
-          $('#items tbody').append(html)
+          $('#items_new tbody').append(html)          
+        
+        $("#items_new").dataTable
+          bPaginate: false
+          bLengthChange: false
+          bFilter: true
+          bSort: false
+          bInfo: false
+          bAutoWidth: false
+          aoColumns: [null, null]
+      
     
   render: ->
     @$el.html(@template())    

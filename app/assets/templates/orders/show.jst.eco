@@ -19,16 +19,6 @@ $(function(){
 				</div>
 				<div class="modal-body">
 					
-					<form action="/" class="filters form-inline">
-						<label>Search for Item by:</label>
-						<select id="filterField" name="fields">
-							<option value="item_name"> Item Name </option>
-							<option value="item_description"> Item Description </option>
-						</select>
-						<input type="text" id="filterText" name="request">
-						<input type="submit" id="search" class= "btn btn-primary"value="Search">
-					</form>
-
 					<table id="items" class="table table-condensed table-hover">
 						<tbody>
 							<tr>
@@ -84,16 +74,6 @@ $(function(){
 					<h3 id="myModalLabel">Item Edit</h3>
 				</div>
 				<div class="modal-body">
-
-					<form action="/" class="filters form-inline">
-						<label>Search for Item by:</label>
-						<select id="filterField" name="fields">
-							<option value="item_name"> Item Name </option>
-							<option value="item_description"> Item Description </option>
-						</select>
-						<input type="text" id="filterText" name="request">
-						<input type="submit" id="search" class= "btn btn-primary"value="Search">
-					</form>
 
 					<table id="items" class="table table-condensed table-hover">
 						<tbody>

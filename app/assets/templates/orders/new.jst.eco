@@ -18,24 +18,16 @@ $(function(){
 					<h3 id="myModalLabel">Item Search</h3>
 				</div>
 				<div class="modal-body">
-
-					<form action="/" class="filters form-inline">
-						<label>Search for Item by:</label>
-						<select id="filterField" name="fields">
-							<option value="item_name"> Item Name </option>
-							<option value="item_description"> Item Description </option>
-						</select>
-						<input type="text" id="filterText" name="request">
-						<input type="submit" id="search" class= "btn btn-primary"value="Search">
-					</form>
-
-					<table id="items" class="table table-condensed table-hover">
-						<tbody>
-							<tr>
-								<th>Item Name</th>
-								<th>Item Description</th>								
-							</tr>							
-						</tbody>
+					
+					<table id="items_new" class="table table-condensed table-hover">
+					  <thead>
+						<tr>
+							<th>Item Name</th>
+							<th>Item Description</th>
+						</tr>
+					  </thead>
+					  <tbody>
+					  </tbody>
 					</table>
 					
 					<div class="panel">
@@ -83,18 +75,8 @@ $(function(){
 					<h3 id="myModalLabel">Item Edit</h3>
 				</div>
 				<div class="modal-body">
-
-					<form action="/" class="filters form-inline">
-						<label>Search for Item by:</label>
-						<select id="filterField" name="fields">
-							<option value="item_name"> Item Name </option>
-							<option value="item_description"> Item Description </option>
-						</select>
-						<input type="text" id="filterText" name="request">
-						<input type="submit" id="search" class= "btn btn-primary"value="Search">
-					</form>
-
-					<table id="items" class="table table-condensed table-hover">
+					
+					<table id="items_new" class="table table-condensed table-hover">
 						<tbody>
 							<tr>
 								<th>Item Name</th>
