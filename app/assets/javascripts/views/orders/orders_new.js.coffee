@@ -39,7 +39,7 @@ class Shop.Views.OrdersNew extends Backbone.View
     
   render: ->
     @$el.html(@template())    
-    #@initFormValidation()      
+    @initFormValidation()      
     @
 
   setInitValues: () ->   
@@ -47,12 +47,18 @@ class Shop.Views.OrdersNew extends Backbone.View
       num = ((_.last(data.models)).id + 1).toString() 
       num = "0" + num while num.length < 6      
       $("#order_number").val(num)  
+        
+    today = new Date()
+    dd = today.getDate()
+    mm = today.getMonth()+1
+    yyyy = today.getFullYear()
+    dd = "0" + dd if dd<10
+    mm = "0" + mm if mm<10    
+    today =  yyyy + '-' + mm + '-' + dd
+   
+    $(@el).find("#date_of_ordering").text(today)
+    $(@el).find("#expiry_date").val(today)
 
-    d = new Date()    
-    d = d.getFullYear() + "-" + Number(d.getUTCMonth()+1) + '-' + d.getUTCDate() 
-    $(@el).find("#date_of_ordering").text(d)
-    $(@el).find("#expiry_date").val(d)
-    
     $(@el).find('#status').text("Created")
     $(@el).find('#order').attr("disabled", true)          
 
@@ -219,6 +225,11 @@ class Shop.Views.OrdersNew extends Backbone.View
     view.parentView = @
     view.parent = @model
     @$('#items_table tbody').append(view.render().el) 
+
+    deleted_price = - Number($(@el).find('#deletedItem .price').html())
+    deleted_quantity = - Number($(@el).find('#deletedItem .quantity').html())
+    @getTotal(deleted_quantity,deleted_price)
+    
     $(@el).find('#deletedItem').remove() 
     @getTotal(quantity,price_per_line) 
 
@@ -226,48 +237,51 @@ class Shop.Views.OrdersNew extends Backbone.View
     $(@el).find('#deletedItem').removeAttr("id")
 
   createOrder: (event) ->    
-    order_items = @model.order_items    
-    collection_of_orders = @collection
-
     event.preventDefault()        
-    attributes = 
-      user_id            : Number(curUser.id)   
-      order_number       : $(@el).find('#order_number').val()
-      status             : $(@el).find('#status').text()     
-      total_price        : Number($(@el).find('#total_price').text())
-      total_num_of_items : Number($(@el).find('#total_num_of_items').text())
-      date_of_ordering   : $(@el).find('#date_of_ordering').text()
-      pref_delivery_date : $(@el).find('#pref_delivery_date').val()    
-      role               : $(@el).find('#assignee').val()
-      credit_card_type   : $(@el).find('#credit_card_type').val()
-      credit_card_number : $(@el).find('#credit_card_number').val()
-      cvv2               : $(@el).find('#cvv2').val()
-      expiry_date        : $(@el).find('#expiry_date').val()
-      start_date         : $(@el).find('#start_date').val()
-      issue_number       : $(@el).find('#issue_number').val()      
-           
-    id = @model.get('id')
-    unless id?
-      @model.save attributes,   
-      success: (model, response) ->    
-        order_id = Number(response.id)        
-        _.each order_items.models, (order_item) -> 
-          order_item.set({order_id:order_id})
-          order_item.save
-            wait: true      
-            success: ->
-            error: @handleError             
-        collection_of_orders.add @model
-        $('#order').removeAttr("disabled", true)          
-        #Backbone.history.navigate("/orders/#{order_id}/edit", true)            
-      error: @handleError        
+    if @model.order_items.length is 0   
+      alert "Please select items and add them to the order."
     else
-      _.each order_items.models, (order_item) -> 
-          order_item.set({order_id:id})
-          order_item.save
-            wait: true      
-            succes: ->
-            error: @handleError                    
+      order_items = @model.order_items    
+      collection_of_orders = @collection
+
+      attributes = 
+        user_id            : Number(curUser.id)   
+        order_number       : $(@el).find('#order_number').val()
+        status             : $(@el).find('#status').text()     
+        total_price        : Number($(@el).find('#total_price').text())
+        total_num_of_items : Number($(@el).find('#total_num_of_items').text())
+        date_of_ordering   : $(@el).find('#date_of_ordering').text()
+        pref_delivery_date : $(@el).find('#pref_delivery_date').val()    
+        role               : $(@el).find('#assignee').val()
+        credit_card_type   : $(@el).find('#credit_card_type').val()
+        credit_card_number : $(@el).find('#credit_card_number').val()
+        cvv2               : $(@el).find('#cvv2').val()
+        expiry_date        : $(@el).find('#expiry_date').val()
+        start_date         : $(@el).find('#start_date').val()
+        issue_number       : $(@el).find('#issue_number').val()      
+           
+      id = @model.get('id')
+      unless id?
+        @model.save attributes,   
+        success: (model, response) ->    
+          order_id = Number(response.id)        
+          _.each order_items.models, (order_item) -> 
+            order_item.set({order_id:order_id})
+            order_item.save
+              wait: true      
+              success: ->
+              error: @handleError             
+          collection_of_orders.add @model
+          $('#order').removeAttr("disabled", true)          
+          #Backbone.history.navigate("/orders/#{order_id}/edit", true)            
+        error: @handleError        
+      else
+        _.each order_items.models, (order_item) -> 
+            order_item.set({order_id:id})
+            order_item.save
+              wait: true      
+              succes: ->
+              error: @handleError                    
          
   handleError: (order, response) ->
     if response.status == 422

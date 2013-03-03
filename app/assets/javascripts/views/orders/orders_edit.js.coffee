@@ -27,7 +27,8 @@ class Shop.Views.OrdersEdit extends Backbone.View
     @setMerchandiser()
         
   render: ->    
-    $(@el).html(@template(order: @model))    
+    $(@el).html(@template(order: @model))
+    @initFormValidation()          
     @
 
   orderItemsLoad: ->  
@@ -65,7 +66,72 @@ class Shop.Views.OrdersEdit extends Backbone.View
         selectedOption = (if (assignee is merch) then " selected" else "")
         html = '<option value='+ '"' + merch + '"' + selectedOption + '>' + merch + '</option>'                
         $('#assignee').append(html)                       
-       
+  
+  initFormValidation: -> 
+    jQuery.validator.addMethod "checkPrefDeliveryDate", ((value, element) ->
+      pref_delivery_date = $(@el).find("#pref_delivery_date").val()
+      date_of_ordering = $(@el).find("#date_of_ordering").text()            
+      new Date(pref_delivery_date).getTime() > new Date(date_of_ordering).getTime()
+    ), "Preferable Delivery Date goes before the Date of Ordering!"
+
+    jQuery.validator.addMethod "checkExpiryDate", ((value, element) ->
+      expiry_date = $(@el).find("#expiry_date").val()
+      start_date = $(@el).find("#start_date").val()
+      new Date(start_date).getTime() < new Date(expiry_date).getTime()
+    ), "Expiry Date goes before the Start Date!"
+
+    $(@el).find('form#edit_order').validate
+      rules:
+        order_number: 
+          required: true           
+        credit_card_number:
+          required: true
+          digits: true
+          maxlength: 16     
+          minlength: 16
+        cvv2:
+          required: true
+          digits: true
+          maxlength: 3     
+          minlength: 3
+        issue_number:
+          digits: true
+          maxlength: 1     
+          minlength: 1
+       # pref_delivery_date:
+       #   checkPrefDeliveryDate:true
+        start_date:
+          required: true
+        expiry_date:
+          required: true
+        #  checkExpiryDate:true
+          
+      messages:
+        order_number: 
+          required: "Order number cannot be blank!"
+        credit_card_number: 
+          required: "Credit card number cannot be blank!"
+          digits: "Credit card number should contain digits only!"
+          maxlength: "Credit card number should contain 16 digits!"     
+          minlength: "Credit card number should contain 16 digits!"
+        cvv2: 
+          required: "cvv2 cannot be blank!"
+          digits: "cvv2 should contain digits only!"
+          maxlength: "cvv2 should contain 3 digits!"     
+          minlength: "cvv2 should contain 3 digits!"
+        issue_number:
+          digits: "Issue number should contain digits only!"
+          maxlength: "Issue number should contain 1 digit"     
+          minlength: "Issue number should contain 1 digit" 
+        pref_delivery_date:
+          checkPrefDeliveryDate: "Preferable Delivery Date goes before the Date of Ordering!"
+        start_date:
+          required: "Start Date cannot be blank!"  
+        expiry_date:
+          required: "Expiry Date cannot be blank!"
+          checkExpiryDate: "Expiry Date goes before the Start Date!"     
+
+
   getTotal: (quantity, price_per_line)  ->
     total_price = Number($(@el).find('#total_price').text())
     total_price = total_price + price_per_line
@@ -161,7 +227,12 @@ class Shop.Views.OrdersEdit extends Backbone.View
     view.parentView = @    
     view.parent = @model
     @$('#items_table tbody').append(view.render().el)  
+    
+    deleted_price = - Number($(@el).find('#deletedItem .price').html())
+    deleted_quantity = - Number($(@el).find('#deletedItem .quantity').html())
+    @getTotal(deleted_quantity,deleted_price)
     $(@el).find('#deletedItem').remove() 
+
     @getTotal(quantity,price_per_line)   
     
   cancelEdit: ->    
@@ -173,25 +244,28 @@ class Shop.Views.OrdersEdit extends Backbone.View
 
   editOrder: (event) ->      
     event.preventDefault()
-    attributes =       
-      delivery_date      :  $(@el).find('#delivery_date').text()
-      pref_delivery_date :  $(@el).find('#pref_delivery_date').val()
-      role               :  $(@el).find('#assignee').val() 
-      total_price        :  Number($(@el).find('#total_price').text())
-      total_num_of_items :  Number($(@el).find('#total_num_of_items').text())
-    @model.save attributes,
-      wait: true      
-      error: @handleError      
-    
-    _.each @model.order_items.models, (model) ->          
-      model.save
+    if @model.order_items.length is 0   
+      alert "Please select items and add them to the order."
+    else    
+      attributes =       
+        delivery_date      :  $(@el).find('#delivery_date').text()
+        pref_delivery_date :  $(@el).find('#pref_delivery_date').val()
+        role               :  $(@el).find('#assignee').val() 
+        total_price        :  Number($(@el).find('#total_price').text())
+        total_num_of_items :  Number($(@el).find('#total_num_of_items').text())
+      @model.save attributes,
         wait: true      
-        error: @handleError   
+        error: @handleError      
+      
+      _.each @model.order_items.models, (model) ->          
+        model.save
+          wait: true      
+          error: @handleError   
 
-    _.each @model.order_items.removedOrderItems, (model) ->    
-      model.destroy
-        wait: true      
-        error: @handleError       
+      _.each @model.order_items.removedOrderItems, (model) ->    
+        model.destroy
+          wait: true      
+          error: @handleError       
 
   setOrderStatus: (event) ->    
     event.preventDefault()            
