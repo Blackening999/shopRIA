@@ -249,12 +249,18 @@ class Shop.Views.OrdersEdit extends Backbone.View
     if @model.order_items.length is 0   
       alert "Please select items and add them to the order."
     else    
-      attributes =       
-        delivery_date      :  $(@el).find('#delivery_date').text()
-        pref_delivery_date :  $(@el).find('#pref_delivery_date').val()
-        role               :  $(@el).find('#assignee').val() 
-        total_price        :  Number($(@el).find('#total_price').text())
-        total_num_of_items :  Number($(@el).find('#total_num_of_items').text())
+      attributes =               
+        pref_delivery_date : $(@el).find('#pref_delivery_date').val()
+        role               : $(@el).find('#assignee').val() 
+        total_price        : Number($(@el).find('#total_price').text())
+        total_num_of_items : Number($(@el).find('#total_num_of_items').text())       
+        credit_card_type   : $(@el).find('#credit_card_type').val()
+        credit_card_number : $(@el).find('#credit_card_number').val()
+        cvv2               : $(@el).find('#cvv2').val()
+        expiry_date        : $(@el).find('#expiry_date').val()
+        start_date         : $(@el).find('#start_date').val()
+        issue_number       : $(@el).find('#issue_number').val()     
+
       @model.save attributes,
         wait: true      
         error: @handleError      
