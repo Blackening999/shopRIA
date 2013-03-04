@@ -73,7 +73,6 @@ class Shop.Views.OrdersNew extends Backbone.View
     $(@el).find('#status').text("Created")
     $(@el).find('#order').attr("disabled", true)  
 
-
     # html = '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'      
     # $('#items_table tbody').append(html) 
 

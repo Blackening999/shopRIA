@@ -118,9 +118,13 @@ ul.hmenu li {
 
 #items_table_length > label {
   float: right;
-  position: relative;
+  position: relative;  
+}
+
+#edit_order #items_table_length > label {
   margin-top: -30px;
 }
+
 
 .dataTables_info {
   display: none;
@@ -130,7 +134,7 @@ ul.hmenu li {
   text-align: center;
 }
 
-#items_table_paginate > span{
+#items_table_paginate > span {
   display: none;
 }
 
