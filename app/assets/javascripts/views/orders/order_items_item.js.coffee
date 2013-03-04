@@ -15,6 +15,8 @@ class Shop.Views.OrderItemsItem extends Backbone.View
   goToEdit: ->   
     @parent.editItem = @model
     $(@el).attr('id', 'deletedItem')
+    $(@parentView.el).find('#addItem').hide()
+    $(@parentView.el).find('#editItem').show()
     @parent.editItemEl = @el    
    
   getTotal: ->

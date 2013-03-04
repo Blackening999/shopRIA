@@ -5,19 +5,16 @@ class Shop.Views.OrdersNew extends Backbone.View
   template: JST['orders/new']
 
   events:
-    'submit #new_order'               : 'createOrder'
-    'click #order'                    : 'setOrderStatus'
-    'click #cancel'                   : 'returnOnMain'
+    'submit #new_order'                      : 'createOrder'
+    'click #order'                           : 'setOrderStatus'
+    'click #cancel'                          : 'returnOnMain'
     
-    'click #modalAdd .item_line_new'  : 'selectAddItem'
-    'click #modalAdd #addItemNew'     : 'addItem' 
-    'click #modalAdd #remove'         : 'clearFields' 
-
-    'click #modalEdit .item_line_new' : 'selectEditItem'
-    'click #modalEdit #editItem'      : 'editItem' 
-    'click #modalEdit #cancelEdit'    : 'cancelEdit' 
-    'click #modalEdit #remove'        : 'clearFields'
-    
+    'click .popup_new'                       : 'openPopup' 
+    'click #popupAddItemNew .item_line_new'  : 'selectItem'
+    'click #popupAddItemNew #addItem'        : 'addItem' 
+    'click #popupAddItemNew #editItem'       : 'editItem' 
+    'click #popupAddItemNew #remove'         : 'clearFields' 
+    'click #popupAddItemNew #cancelEdit'     : 'cancelEdit'         
     
   initialize: ->    
     @render()    
@@ -44,13 +41,17 @@ class Shop.Views.OrdersNew extends Backbone.View
           bSort: false
           bInfo: false
           bAutoWidth: false
-          aoColumns: [null, null]
-      
+          aoColumns: [null, null]      
     
   render: ->
     @$el.html(@template())    
     @initFormValidation()      
     @
+
+  openPopup: (e) ->
+    e.preventDefault()
+    $(@el).find('#addItem').show()
+    $(@el).find('#editItem').hide()
 
   setInitValues: () ->   
     $.getJSON "/api/orderings.json", (data) ->
@@ -159,29 +160,20 @@ class Shop.Views.OrdersNew extends Backbone.View
     $(@el).find('#price').text("")
     $(@el).find('#quantity').val(1)  
 
-  selectAddItem: (e) ->    
+  selectItem: (e) ->    
     item_id = $(e.target).parent().data('id')
     @itm = @model.items.get(item_id)
     itmName = @itm.get("item_name")
     itmPrice = @itm.get("price")
-    $(@el).find('#modalAdd #item_name').text(itmName)
-    $(@el).find('#modalAdd #price').text(itmPrice)
-    $(@el).find('#modalAdd #quantity').val(1)  
-
-  selectEditItem: (e) ->    
-    item_id = $(e.target).parent().data('id')
-    @itm = @model.items.get(item_id)
-    itmName = @itm.get("item_name")
-    itmPrice = @itm.get("price")
-    $(@el).find('#modalEdit #item_name').text(itmName)
-    $(@el).find('#modalEdit #price').text(itmPrice)
-    $(@el).find('#modalEdit #quantity').val(1)    
-
+    $(@el).find('#item_name').text(itmName)
+    $(@el).find('#price').text(itmPrice)
+    $(@el).find('#quantity').val(1)  
+  
   addItem: (e) ->
     e.preventDefault()
-    price     = Number($(@el).find('#modalAdd #price').text())
-    dimension = $(@el).find('#modalAdd #dimension :selected').val()
-    quantity  = Number($(@el).find('#modalAdd #quantity').val())
+    price     = Number($(@el).find('#price').text())
+    dimension = $(@el).find('#dimension :selected').val()
+    quantity  = Number($(@el).find('#quantity').val())
     
     price_per_line = price*quantity
     
@@ -208,9 +200,9 @@ class Shop.Views.OrdersNew extends Backbone.View
 
   editItem: (e) ->        
     e.preventDefault()
-    price     = Number($(@el).find('#modalEdit #price').text())
-    dimension = $(@el).find('#modalEdit #dimension :selected').val()
-    quantity  = Number($(@el).find('#modalEdit #quantity').val())
+    price     = Number($(@el).find('#price').text())
+    dimension = $(@el).find('#dimension :selected').val()
+    quantity  = Number($(@el).find('#quantity').val())
     
     price_per_line = price*quantity
     
