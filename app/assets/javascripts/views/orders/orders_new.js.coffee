@@ -71,7 +71,14 @@ class Shop.Views.OrdersNew extends Backbone.View
     $(@el).find("#expiry_date").val(today)
 
     $(@el).find('#status').text("Created")
-    $(@el).find('#order').attr("disabled", true)          
+    $(@el).find('#order').attr("disabled", true)  
+
+
+    # html = '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'      
+    # $('#items_table tbody').append(html) 
+
+    # $("#items_table").dataTable
+    #     "sPaginationType": "full_numbers"        
 
   setMerchandiser: () ->   
     $.getJSON "/api/users.json", (data) ->
@@ -195,7 +202,8 @@ class Shop.Views.OrdersNew extends Backbone.View
     view = new Shop.Views.OrderItemsItem(model: order_item, collection: @model.order_items)
     view.parentView = @
     view.parent = @model
-    @$('#items_table tbody').append(view.render().el)  
+    $(@el).find('#items_table tbody').append(view.render().el)     
+
     @getTotal(quantity,price_per_line) 
 
   editItem: (e) ->        

@@ -43,7 +43,11 @@ class Shop.Views.OrdersEdit extends Backbone.View
           orderView = new Shop.Views.OrderItemsItem(model: model, collection:collection)
           orderView.parentView = orderEditView          
           orderView.parent = orderEditModel
-          @$('#items_table tbody').append(orderView.render().el)          
+          $('#items_table tbody').append(orderView.render().el)          
+
+        $("#items_table").dataTable
+          "sPaginationType": "full_numbers"
+            
     console.log @model.order_items    
     @render()    
 

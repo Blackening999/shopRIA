@@ -81,19 +81,11 @@ $(function(){
 	<div class="items_panel">
         <h5>Items Selection</h5>
 		<div class="row-fluid">
-			<a href="#popupAddItem" role="button" class="btn btn-primary popup" data-toggle="modal">Add Item</a>			
-			<select class="limit pull-right">
-				<option>
-					show 10 lines
-				</option>
-				<option>
-					show 25 lines
-				</option>
-			</select>
+			<a href="#popupAddItem" role="button" class="btn btn-primary popup" data-toggle="modal">Add Item</a>						
 		</div>
 		<div id="table_order_items">
-        <table id="items_table" class="table table-condensed">
-		  <tbody>
+        <table id="items_table" class="table table-condensed">		  
+   		  <thead> 			  
 			<tr>
 				<th>
 					Item Number
@@ -123,25 +115,12 @@ $(function(){
 					Delete
 				</th>
 			</tr>
+		  </thead>		
+		  <tbody> 	
 		  </tbody>	
 		</table>  
        </div> 
-		<div class="pagination pagination-centered" id="paging-buttons">       
-	    	  <ul class="pager">                
-                    <li>
-                        <a id="first">First</a>
-                    </li>
-                    <li>
-                        <a id="backward">&larr; Backward</a>
-                    </li>
-                    <li>
-                        <a id="forward">Forward &rarr;</a>
-                    </li>
-                    <li>
-                        <a id="last">Last</a>
-                    </li>          
-          </ul>            
-	    </div>
+		
 	 </div>   
 	    <div class="row-fluid">
           <div class="items_panel span6">
@@ -238,7 +217,7 @@ $(function(){
 
 	<div class="row-fluid">
     <div class="span3 offset9" >
-		<input type="submit" class="btn btn-primary" value="Save">
+		<button type="submit" class="btn btn-primary">Save</button>
 		<button id="order" class="btn btn-primary">Order</button>
 		<button id="cancel" class="btn btn-primary">Cancel</button>
     </div>
