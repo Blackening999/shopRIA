@@ -18,5 +18,5 @@ class Shop.Routers.Items extends Backbone.Router
   
   edit: (id) ->
     item = @collection.get(id)
-    view = new Shop.Views.ItemsEdit({model: item})
+    view = new Shop.Views.ItemsEdit(model: item,collection: @collection)
   

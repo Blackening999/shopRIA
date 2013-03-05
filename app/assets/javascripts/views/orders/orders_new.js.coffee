@@ -280,7 +280,7 @@ class Shop.Views.OrdersNew extends Backbone.View
               wait: true      
               success: ->
               error: @handleError             
-          collection_of_orders.add @model
+          collection_of_orders.add model
           $('#order').removeAttr("disabled", true)          
           #Backbone.history.navigate("/orders/#{order_id}/edit", true)            
         error: @handleError        
@@ -304,9 +304,9 @@ class Shop.Views.OrdersNew extends Backbone.View
       status: "Pending"     
     
     @model.save attributes,
-      succes: ->
-        $(@el).find('#order').attr("disabled", true)        
-    window.location.href = "/orders"     
+      succes: ->        
+        window.location.href = "/orders"     
+        true
     
   returnOnMain: ->
     if confirm 'Are you sure you want to cancel operation. All data will be lost?'

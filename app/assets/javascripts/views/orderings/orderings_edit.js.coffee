@@ -53,8 +53,8 @@ class Shop.Views.OrderingsEdit extends Backbone.View
       status        : status   
       delivery_date : $(@el).find('#delivery_date').val() 
     @model.save attributes,
-      wait: true      
-      error: @handleError
+      succes: ->
+        console.log "saved"
     window.location.href = "/orderings"      
 
   handleError: (user, response) ->

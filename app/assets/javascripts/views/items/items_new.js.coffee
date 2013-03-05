@@ -6,11 +6,11 @@ class Shop.Views.ItemsNew extends Backbone.View
 
   events:
     "submit #new_item": "createItem"
-    #'click #cancel'   : 'returnOnMain'  
+    'click #cancel'   : 'returnOnMain'  
     'click #refresh'  : 'refreshFields'   
 
   initialize: ->
-    #@collection.on('add', @render, @)
+    @collection.on('add', @render, @)
     @render()
     
   render: ->
@@ -44,10 +44,11 @@ class Shop.Views.ItemsNew extends Backbone.View
       item_description: $(@el).find('#item_description').val()
       price: $(@el).find('#price').val()      
       
-    @model.save attributes
-    collection_of_items.add @model        
+    @model.save attributes,
+      success: (model, response) ->    
+        collection_of_items.add model        
      
-    window.location.href = "/items"      
+    #window.location.href = "/items"      
 
   handleError: (user, response) ->
     if response.status == 422
@@ -55,9 +56,9 @@ class Shop.Views.ItemsNew extends Backbone.View
       for attribute, messages of errors
         alert "#{attribute} #{message}" for message in messages
 
-  # returnOnMain: ->
-  #   if confirm 'Are you sure you want to cancel operation. All data will be lost?'
-  #     Backbone.history.navigate("", true)
+  returnOnMain: ->
+    if confirm 'Are you sure you want to cancel operation. All data will be lost?'
+      Backbone.history.navigate("", true)
 
   refreshFields: ->
     $(@el).find('#item_name').val('')

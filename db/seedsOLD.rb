@@ -1,3 +1,39 @@
+User.create([
+  { :login_name => 'admin',
+    :first_name => 'admin',
+    :last_name => 'admin',
+    :password => 'aA1!',
+    :password_confirmation => 'aA1!',
+    :email => 'admin@gmail.com',
+    :region => 'South',
+    :role => 'Administrator' },
+  { :login_name => 'customer',
+    :first_name => 'customer',
+    :last_name => 'customer',
+    :password => 'aA1!',
+    :password_confirmation => 'aA1!',
+    :email => 'customer@gmail.com',
+    :region => 'South',
+    :role => 'Customer' },
+  { :login_name => 'merchandiser',
+    :first_name => 'merchandiser',
+    :last_name => 'merchandiser',
+    :password => 'aA1!',
+    :password_confirmation => 'aA1!',
+    :email => 'merchandiser@gmail.com',
+    :region => 'South',
+    :role => 'Merchandiser'},
+  { :login_name => 'supervisor',
+    :first_name => 'supervisor',
+    :last_name => 'supervisor',
+    :password => 'aA1!',
+    :password_confirmation => 'aA1!',
+    :email => 'supervisor@gmail.com',
+    :region => 'South',
+    :role => 'Supervisor' }
+  ])
+
+
 items = Item.create([{ item_name: "Orange1", item_description: "Orange1", price: 10 },
                      {item_name: "Onion1", item_description: "Onion1", price: 2 }])
 

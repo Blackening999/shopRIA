@@ -62,6 +62,8 @@
 		<label class="radio"><input type="radio" name="role" id="Supervisor" value="Supervisor"> Supervisor</label> <label class="radio"><input type="radio" name="role" id="Customer" value="Customer"> Customer</label>
 	</div>
 	<div class="paging-buttons">
-		<input type="submit" class="btn btn-success" value="Create"> <button id="cancel" class="btn btn-success">Cancel</button> <button id="refresh" class="btn btn-success">Refresh</button>
+		<button type="submit" class="btn btn-primary">Create</button>
+		<button id="cancel" class="btn btn-primary">Cancel</button> 
+		<button id="refresh" class="btn btn-primary">Refresh</button>
 	</div>
 </form>

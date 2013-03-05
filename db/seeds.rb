@@ -16,19 +16,11 @@ User.create([
     :region => 'South',
     :role => 'Customer' },
   { :login_name => 'merchandiser',
-    :first_name => 'Homer',
-    :last_name => 'Simpson',
+    :first_name => 'merchandiser',
+    :last_name => 'merchandiser',
     :password => 'aA1!',
     :password_confirmation => 'aA1!',
     :email => 'merchandiser@gmail.com',
-    :region => 'South',
-    :role => 'Merchandiser'},
-  { :login_name => 'merchandiser2',
-    :first_name => 'John',
-    :last_name => 'Smith',
-    :password => 'aA1!',
-    :password_confirmation => 'aA1!',
-    :email => 'merchandiser2@gmail.com',
     :region => 'South',
     :role => 'Merchandiser'},
   { :login_name => 'supervisor',
@@ -41,44 +33,80 @@ User.create([
     :role => 'Supervisor' }
   ])
 
-items = Item.create([{ item_name: "Orange1", item_description: "Orange1", price: 10 },
-                     {item_name: "Onion1", item_description: "Onion1", price: 2 }])
+Item.create([
+  { :item_name => "Tangerine", :item_description => "Tangerine Georgia", :price => 2.0, :created_at => "2013-03-04 21:18:10", :updated_at => "2013-03-05 08:19:41" },
+  { :item_name => "Apple Red", :item_description => "Apple Red", :price => 1.0, :created_at => "2013-03-04 21:27:55", :updated_at => "2013-03-04 21:27:55" },
+  { :item_name => "Apple Green", :item_description => "Apple Green", :price => 2.0, :created_at => "2013-03-04 21:28:09", :updated_at => "2013-03-04 21:28:09" },
+  { :item_name => "Orange", :item_description => "Spain Orange", :price => 3.0, :created_at => "2013-03-04 21:28:34", :updated_at => "2013-03-04 21:29:15" },
+  { :item_name => "Apricot", :item_description => "Apricot", :price => 5.0, :created_at => "2013-03-04 21:29:30", :updated_at => "2013-03-04 21:29:30" },
+  { :item_name => "Pear", :item_description => "Pear", :price => 2.0, :created_at => "2013-03-04 21:29:44", :updated_at => "2013-03-04 21:29:44" },
+  { :item_name => "Pineapple", :item_description => "Pineapple", :price => 7.0, :created_at => "2013-03-04 21:30:00", :updated_at => "2013-03-04 21:50:08" },
+  { :item_name => "Peach", :item_description => "Peach", :price => 1.0, :created_at => "2013-03-05 09:25:44", :updated_at => "2013-03-05 09:25:44" },
+  { :item_name => "Strawberry", :item_description => "Strawberry", :price => 10.0, :created_at => "2013-03-05 09:32:51", :updated_at => "2013-03-05 09:35:56" },
+  { :item_name => "Cabbage", :item_description => "Cabbage", :price => 1.0, :created_at => "2013-03-05 09:39:06", :updated_at => "2013-03-05 09:39:06" },
+  { :item_name => "Tomato", :item_description => "Tomato", :price => 3.0, :created_at => "2013-03-05 09:40:45", :updated_at => "2013-03-05 09:41:14" },
+  { :item_name => "Potato", :item_description => "Potato", :price => 1.0, :created_at => "2013-03-05 09:41:14", :updated_at => "2013-03-05 09:47:51" }
+], :without_protection => true )
 
 
-order1=Order.create(order_number: '000001',
-           total_price: 90,
-           total_num_of_items: 3,
-           max_discount: 0,
-           status: "Ordered",
-           role: "merchandiser",
-           date_of_ordering: Time.now,
-             delivery_date: Time.now,
-             pref_delivery_date: Time.now,
-             credit_card_type: "MasterCard")
 
-order_item1 = OrderItem.create(price_per_line: 50, dimension: "Box", quantity: 1, item_id: items[0].id)
-order_item2 = OrderItem.create(price_per_line: 40, dimension: "Package", quantity: 2, item_id: items[1].id)
+Order.create([
+  { :order_number => "000003", :total_price => 38.0, :total_num_of_items => 12, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => "2013-03-12", :credit_card_type => "MasterCard", :credit_card_number => "1378223111454511", :cvv2 => "123", :expiry_date => "2015-03-25", :start_date => "2012-03-25", :issue_number => "1", :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 10:27:49" },
+  { :order_number => "000004", :total_price => 12.0, :total_num_of_items => 2, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser2", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1213457741110003", :cvv2 => "892", :expiry_date => "2013-03-05", :start_date => "2013-03-21", :issue_number => "1", :created_at => "2013-03-05 10:00:20", :updated_at => "2013-03-05 10:27:56" },
+  { :order_number => "000005", :total_price => 2.0, :total_num_of_items => 1, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1234567890123456", :cvv2 => "123", :expiry_date => "2013-03-31", :start_date => "2013-03-03", :issue_number => "2", :created_at => "2013-03-05 10:05:40", :updated_at => "2013-03-05 10:28:01" },
+  { :order_number => "000006", :total_price => 1.0, :total_num_of_items => 1, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1213457741110003", :cvv2 => "123", :expiry_date => "2013-03-31", :start_date => "2013-03-03", :issue_number => "3", :created_at => "2013-03-05 10:09:09", :updated_at => "2013-03-05 10:28:07" },
+  { :order_number => "000007", :total_price => 2.0, :total_num_of_items => 2, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1378223111454511", :cvv2 => "122", :expiry_date => "2013-03-05", :start_date => "2013-03-03", :issue_number => "1", :created_at => "2013-03-05 10:14:03", :updated_at => "2013-03-05 10:38:21" },
+  { :order_number => "000008", :total_price => 1.0, :total_num_of_items => 1, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1213457741110003", :cvv2 => "123", :expiry_date => "2013-03-31", :start_date => "2013-03-03", :issue_number => "8", :created_at => "2013-03-05 10:17:04", :updated_at => "2013-03-05 10:38:26" },
+  { :order_number => "000009", :total_price => 1.0, :total_num_of_items => 1, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1378223111454511", :cvv2 => "124", :expiry_date => "2013-03-31", :start_date => "2013-02-18", :issue_number => "8", :created_at => "2013-03-05 10:19:20", :updated_at => "2013-03-05 10:33:37" },
+  { :order_number => "000010", :total_price => 70.0, :total_num_of_items => 1, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1213457741110003", :cvv2 => "122", :expiry_date => "2013-03-29", :start_date => "2013-02-10", :issue_number => "1", :created_at => "2013-03-05 10:21:42", :updated_at => "2013-03-05 10:44:10" },
+  { :order_number => "000011", :total_price => 2.0, :total_num_of_items => 1, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1378223111454511", :cvv2 => "121", :expiry_date => "2013-03-31", :start_date => "2013-02-03", :issue_number => "2", :created_at => "2013-03-05 10:22:53", :updated_at => "2013-03-05 10:44:16" },
+  { :order_number => "000012", :total_price => 37.0, :total_num_of_items => 11, :max_discount => nil, :delivery_date => nil, :status => "Ordered", :user_id => 2, :role => "merchandiser", :date_of_ordering => "2013-03-05", :pref_delivery_date => nil, :credit_card_type => "Visa", :credit_card_number => "1123333333333333", :cvv2 => "123", :expiry_date => "2013-06-28", :start_date => "2013-03-01", :issue_number => "3", :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:44:02" }
+], :without_protection => true )
 
-order1.order_items<<order_item1
-order1.order_items<<order_item2
 
-order2=Order.create(order_number: '000002',
-           total_price: 100,
-           total_num_of_items: 2,
-           max_discount: 0,
-           status: "Ordered",
-           role: "merchandiser2",
-           date_of_ordering: Date.parse('2012-02-03'),
-             delivery_date: Date.parse('2012-03-03'),
-             pref_delivery_date: Time.now,
-             credit_card_type: "American Express")
 
-order_item21 = OrderItem.create(price_per_line: 100, dimension: "Box", quantity: 2, item_id: items[0].id)
+OrderItem.create([
+  { :item_id => 19, :quantity => 1, :price_per_line => 3.0, :created_at => "2013-03-04 21:31:56", :updated_at => "2013-03-04 21:31:56", :order_id => 3, :dimension => "Item" },
+  { :item_id => 22, :quantity => 1, :price_per_line => 35.0, :created_at => "2013-03-05 07:15:39", :updated_at => "2013-03-05 07:15:39", :order_id => 3, :dimension => "Box" },
+  { :item_id => 20, :quantity => 3, :price_per_line => 150.0, :created_at => "2013-03-05 07:15:39", :updated_at => "2013-03-05 07:15:39", :order_id => 3, :dimension => "Package" },
+  { :item_id => 2, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 09:21:03", :updated_at => "2013-03-05 09:21:03", :order_id => 2, :dimension => "Item" },
+  { :item_id => 4, :quantity => 1, :price_per_line => 3.0, :created_at => "2013-03-05 09:21:03", :updated_at => "2013-03-05 09:21:03", :order_id => 2, :dimension => "Item" },
+  { :item_id => 6, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 09:21:03", :updated_at => "2013-03-05 09:21:03", :order_id => 2, :dimension => "Item" },
+  { :item_id => 6, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 09:21:03", :updated_at => "2013-03-05 09:21:03", :order_id => 2, :dimension => "Item" },
+  { :item_id => 1, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 2, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 3, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 4, :quantity => 1, :price_per_line => 3.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 5, :quantity => 1, :price_per_line => 5.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 6, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 7, :quantity => 1, :price_per_line => 7.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 8, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 9, :quantity => 1, :price_per_line => 10.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 12, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 13, :quantity => 1, :price_per_line => 3.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 14, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 09:50:55", :updated_at => "2013-03-05 09:50:55", :order_id => 3, :dimension => "Item" },
+  { :item_id => 1, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 10:00:20", :updated_at => "2013-03-05 10:00:20", :order_id => 4, :dimension => "Item" },
+  { :item_id => 9, :quantity => 1, :price_per_line => 10.0, :created_at => "2013-03-05 10:00:20", :updated_at => "2013-03-05 10:00:20", :order_id => 4, :dimension => "Item" },
+  { :item_id => 1, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 10:05:40", :updated_at => "2013-03-05 10:05:40", :order_id => 5, :dimension => "Item" },
+  { :item_id => 2, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:09:10", :updated_at => "2013-03-05 10:09:10", :order_id => 6, :dimension => "Item" },
+  { :item_id => 12, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:14:03", :updated_at => "2013-03-05 10:14:03", :order_id => 6, :dimension => "Item" },
+  { :item_id => 12, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:14:03", :updated_at => "2013-03-05 10:14:03", :order_id => 7, :dimension => "Item" },
+  { :item_id => 2, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:17:04", :updated_at => "2013-03-05 10:17:04", :order_id => 8, :dimension => "Item" },
+  { :item_id => 2, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:19:20", :updated_at => "2013-03-05 10:19:20", :order_id => 9, :dimension => "Item" },
+  { :item_id => 7, :quantity => 1, :price_per_line => 70.0, :created_at => "2013-03-05 10:21:42", :updated_at => "2013-03-05 10:21:42", :order_id => 10, :dimension => "Package" },
+  { :item_id => 3, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 10:22:53", :updated_at => "2013-03-05 10:22:53", :order_id => 11, :dimension => "Item" },
+  { :item_id => 1, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 3, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 4, :quantity => 1, :price_per_line => 3.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 5, :quantity => 1, :price_per_line => 5.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 6, :quantity => 1, :price_per_line => 2.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 7, :quantity => 1, :price_per_line => 7.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 8, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 9, :quantity => 1, :price_per_line => 10.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 13, :quantity => 1, :price_per_line => 3.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 14, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 2, :quantity => 1, :price_per_line => 1.0, :created_at => "2013-03-05 10:40:15", :updated_at => "2013-03-05 10:40:15", :order_id => 12, :dimension => "Item" },
+  { :item_id => 2, :quantity => 1, :price_per_line => 10.0, :created_at => "2013-03-05 10:40:40", :updated_at => "2013-03-05 10:40:40", :order_id => 12, :dimension => "Package" }
+], :without_protection => true )
 
-order2.order_items<<order_item21
-
-user = User.where(role:"Customer").first
-
-user.orders<<order1
-user.orders<<order2
 

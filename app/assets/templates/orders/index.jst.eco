@@ -16,9 +16,9 @@
               </select>            
             
               <select id="filter_options" name="filter_options">
-              <option value="ordered">Ordered</option>
+              <option value="ordered">Ordered</option>              
               <option value="pending">Pending</option>
-              <option value="delivered">Delivered</option>               
+              <option value="delivered">Delivered</option>                             
               </select>
             </div>               
            </div>
@@ -51,8 +51,8 @@
 				<th href="/orders?orderBy=max_discount%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=max_discount%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Max Discount</th>
 				<th href="/orders?orderBy=delivery_date%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=delivery_date%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Delivery Date</th>
 				<th href="/orders?orderBy=status%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=status%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Status</th>
-				<th href="/orders?orderBy=user_id%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=user_id%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Assignee</th>
-				<th href="/orders?orderBy=role%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=role%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Role</th>
+				<th href="/orders?orderBy=user_id%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=user_id%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Role</th>
+				<th href="/orders?orderBy=role%20asc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>"         id="/orders?orderBy=role%20desc&page=<% @pageInfo.page %>&pp=<%= @pageInfo.pp %>">Assignee</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>			

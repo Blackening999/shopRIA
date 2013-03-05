@@ -9,7 +9,7 @@ class Shop.Views.ItemsIndex extends Backbone.View
     @collection.on('reset', @render, @)
     @collection.on('add', @render, @)
     @collection.on('destroy', @render, @)
-    @collection.on('change', @render, @)
+    @collection.on('change', @render, @)    
     
   render: ->
     $(@el).html(@template(items: @collection))
