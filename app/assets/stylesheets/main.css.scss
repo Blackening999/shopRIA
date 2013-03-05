@@ -125,7 +125,6 @@ ul.hmenu li {
   margin-top: -30px;
 }
 
-
 .dataTables_info {
   display: none;
 }
@@ -139,13 +138,20 @@ ul.hmenu li {
 }
 
 #items_table_previous, #items_table_next, #items_table_first, #items_table_last {
-    border-color: #DDDDDD;
-    border-image: none;
+    border-color: #DDDDDD;   
     border-style: solid;
     border-width: 1px 1px 1px 0;
     color: #0088CC;    
     line-height: 20px;
-    padding: 4px 12px;
+    padding: 4px 8px;
     text-decoration: none;
 }    
 
+#items_wrapper {
+    overflow-y: auto; 
+    
+} 
+
+.mandatory_fields {
+  padding: 2px;
+}

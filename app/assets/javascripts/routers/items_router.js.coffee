@@ -11,9 +11,10 @@ class Shop.Routers.Items extends Backbone.Router
   index: ->
     view = new Shop.Views.ItemsIndex(collection: @collection)
     $('#supervisor').html(view.render().el)  
-   
+    
   newItem: ->
-    view = new Shop.Views.ItemsNew({collection: @collection})
+    item = new Shop.Models.Item()    
+    view = new Shop.Views.ItemsNew(model: item,collection: @collection)
   
   edit: (id) ->
     item = @collection.get(id)

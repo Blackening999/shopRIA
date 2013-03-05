@@ -7,11 +7,10 @@ class Shop.Views.ItemsNew extends Backbone.View
   events:
     "submit #new_item": "createItem"
     #'click #cancel'   : 'returnOnMain'  
-    #'click #refresh'  : 'refreshFields'
-    #'focusout input[name=login_name]': 'checkLogin'  
+    'click #refresh'  : 'refreshFields'   
 
   initialize: ->
-    @collection.on('add', @render, @)
+    #@collection.on('add', @render, @)
     @render()
     
   render: ->
@@ -37,18 +36,18 @@ class Shop.Views.ItemsNew extends Backbone.View
           required: "Price cannot be blank!"  
 
   createItem: (event) ->
-    event.preventDefault()    
+    event.preventDefault() 
+    collection_of_items = @collection
+
     attributes = 
       item_name: $(@el).find('#item_name').val()
       item_description: $(@el).find('#item_description').val()
       price: $(@el).find('#price').val()      
       
-    @collection.create attributes,
-      wait: true
-      success: -> 
-        $('#new_item')[0].reset()
-        window.history.back()
-      error: @handleError
+    @model.save attributes
+    collection_of_items.add @model        
+     
+    window.location.href = "/items"      
 
   handleError: (user, response) ->
     if response.status == 422
@@ -60,12 +59,8 @@ class Shop.Views.ItemsNew extends Backbone.View
   #   if confirm 'Are you sure you want to cancel operation. All data will be lost?'
   #     Backbone.history.navigate("", true)
 
-  # refreshFields: ->
-  #   $(@el).find('#new_login_name').val('')
-  #   $(@el).find('#new_first_name').val('')
-  #   $(@el).find('#new_lastName').val('')
-  #   $(@el).find('#new_password').val('')
-  #   $(@el).find('#new_confirmPassword').val('')
-  #   $(@el).find('#new_email').val('')
-  #   $(@el).find('#region :selected').empty()
-  #   $(@el).find('input:radio:checked').empty()
+  refreshFields: ->
+    $(@el).find('#item_name').val('')
+    $(@el).find('#item_description').val('')
+    $(@el).find('#price').val('')
+   

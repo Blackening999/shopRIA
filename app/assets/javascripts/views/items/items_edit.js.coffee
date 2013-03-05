@@ -6,8 +6,8 @@ class Shop.Views.ItemsEdit extends Backbone.View
 
   events:
     'submit #edit_item' : 'editItem'
-    #'click #cancel'     : 'returnOnMain' 
-    #'click #refresh'    : 'refreshFields'
+    'click #cancel'     : 'returnOnMain' 
+    'click #refresh'    : 'refreshFields'
 
   initialize: ->
     @model.on('change', @render, @)
@@ -26,20 +26,20 @@ class Shop.Views.ItemsEdit extends Backbone.View
     @model.save attributes,
       wait: true      
       error: @handleError    
+    #window.location.href = "/items"   
 
-  handleError: (user, response) ->
+  handleError: (item, response) ->
     if response.status == 422
       errors = $.parseJSON(response.responseText).errors
       for attribute, messages of errors
         alert "#{attribute} #{message}" for message in messages    
 
-  # returnOnMain: ->
-  #   if confirm 'Are you sure you want to cancel operation. All data will be lost?'
-  #     Backbone.history.navigate("", true)
+  returnOnMain: ->
+    if confirm 'Are you sure you want to cancel operation. All data will be lost?'
+      window.location.href = "/items"   
 
-  # refreshFields: ->
-  #   $(@el).find('#new_first_name').val(@model.attributes.first_name)
-  #   $(@el).find('#new_lastName').val(@model.attributes.last_name)
-  #   $(@el).find('#new_email').val(@model.attributes.email)
-  #   $(@el).find('#region :selected').val(@model.attributes.region)
-  #   $(@el).find('input:radio:checked').val(@model.attributes.role)
+  refreshFields: ->
+    $(@el).find('#item_name').val(@model.get('item_name'))
+    $(@el).find('#item_description').val(@model.get('item_description'))
+    $(@el).find('#price').val(@model.get('price'))
+   
